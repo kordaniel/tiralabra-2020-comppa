@@ -59,7 +59,10 @@ public class Main {
         }
 
         System.out.println("");
-        Huffman.printCode(root, "");
+        //Huffman.printCode(root, "");
+        String testStr = "This is an string to be compressed into a very tiny object!.... MAYBE.\nsomeday. hopefully. abcdefghijklmnopqrstuvwxyzåäöÖÄÅASFA\n1234567890!\"#¤%&/()=?'";
+        Huffman huffman = new Huffman();
+        huffman.readStr(testStr);
     }
 
 
