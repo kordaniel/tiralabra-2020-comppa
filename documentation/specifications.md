@@ -12,16 +12,16 @@ Comppa is a project that will do lossless compression and decompression of textu
 
 ## Algorithms and data structures
 * Priority queue utilizing a binary heap. We will use the priority queue as a min queue.
- * Time complexity of different operations:
- * Getting the "first" (smallest) element: O(1)
- * Inserting an element or removing the "first" element: O(log n)
+  * Time complexity of different operations:
+  * Getting the "first" (smallest) element: O(1)
+  * Inserting an element or removing the "first" element: O(log n)
 
 * Huffman coding
- * Produces an optimal binary prefix code
- * Uses the priority queue
- * Uses a probability distribution over the source alphabet and maps the the most frequent symbols to the shortest codewords (compressed alphabet)
- * Creates an Huffman tree where the nodes are the symbols with their optimal prefix codes
- * Total time complexity of the Huffman code utilizing the priority queue is O(n log n), where n is the length of the input alphabet
+  * Produces an optimal binary prefix code
+  * Uses the priority queue
+  * Uses a probability distribution over the source alphabet and maps the the most frequent symbols to the shortest codewords (compressed alphabet)
+  * Creates an Huffman tree where the nodes are the symbols with their optimal prefix codes
+  * Total time complexity of the Huffman code utilizing the priority queue is O(n log n), where n is the length of the input alphabet
 
 * More details including algorithms will be added later
 
