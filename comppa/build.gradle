@@ -7,6 +7,11 @@ jacocoTestReport {
         xml.enabled = true
         html.enabled = true
     }
+//    afterEvaluate {
+//        classDirectories.setFrom(files(classDirectories.files.collect {
+//            fileTree(dir: it, exclude: 'main/**')
+//        }))
+//    }
 }
 
 check.dependsOn jacocoTestReport
@@ -18,5 +23,9 @@ repositories {
 }
 
 dependencies {
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
+}
+
+run {
+    standardInput = System.in
 }
