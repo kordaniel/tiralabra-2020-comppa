@@ -1,5 +1,7 @@
 package comppa;
 
+import comppa.io.Filehandler;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +18,16 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        Filehandler filehandler = new Filehandler();
+        byte[] fileBytes = filehandler.readFile();
+        System.out.println("[INFO] Read " + fileBytes.length + " bytes.");
+        for (int i = 0; i < fileBytes.length; i++) {
+            System.out.print((char) fileBytes[i]);
+        }
+
+        System.exit(0);
+
+
         int n = 10000; // Length of the string
 
         Random random = new Random();
@@ -25,7 +37,6 @@ public class Main {
         char[] charArray = generateTestString(n, random);
         // Map holding char/freq key-val pairs
         Map<Character, Integer> freqs = calculateFrequencies(charArray);
-
 
         for (Map.Entry<Character, Integer> kv : freqs.entrySet()) {
             Node node = new Node();
@@ -63,6 +74,8 @@ public class Main {
         String testStr = "This is an string to be compressed into a very tiny object!.... MAYBE.\nsomeday. hopefully. abcdefghijklmnopqrstuvwxyzåäöÖÄÅASFA\n1234567890!\"#¤%&/()=?'";
         Huffman huffman = new Huffman();
         huffman.readStr(testStr);
+        System.out.println("");
+        System.out.println("VERSION " + System.getProperty("java.version"));
     }
 
 
