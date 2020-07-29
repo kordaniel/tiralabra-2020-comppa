@@ -1,9 +1,29 @@
 apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'application'
+apply plugin: 'checkstyle'
 
 sourceCompatibility = 11
 targetCompatibility = 11
+
+checkstyle {
+    toolVersion '7.8.1'
+}
+
+checkstyleMain {
+    source = 'src/main/java'
+}
+
+checkstyleTest {
+    source = 'src/test/java'
+}
+
+//tasks.withType(Checkstyle) {
+//    reports {
+//        xml.enabled false
+//        html.enabled true
+//    }
+//}
 
 jacocoTestReport {
     reports {
@@ -17,8 +37,6 @@ jacocoTestReport {
 //    }
 }
 
-check.dependsOn jacocoTestReport
-
 mainClassName = 'comppa.Main'
 
 repositories {
@@ -31,4 +49,7 @@ dependencies {
 
 run {
     standardInput = System.in
+    standardOutput = System.out
 }
+
+check.dependsOn jacocoTestReport

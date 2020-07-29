@@ -13,4 +13,13 @@ Comppa does not use any ready made data structures or algorithms, not from Java 
 * [Week 1](documentation/reports/week_report.md)
 
 ### Releases
-* Releases will be published here 
+* Releases will be published here
+
+### Gradle
+Checkstyle reports can be generated with the following commands
+```
+./gradlew check
+./gradlew checkstyleMain
+./gradlew checkstyleTest
+```
+using the gradlew-binary inside the comppa-directory.
