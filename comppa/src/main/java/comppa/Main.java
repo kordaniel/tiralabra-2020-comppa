@@ -1,12 +1,9 @@
 package comppa;
 
 import comppa.io.Filehandler;
+import comppa.logic.Huffman;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Random;
+import java.util.*;
 
 /**
  *
@@ -18,64 +15,29 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Filehandler filehandler = new Filehandler();
-        byte[] fileBytes = filehandler.readFile();
-        System.out.println("[INFO] Read " + fileBytes.length + " bytes.");
-        for (int i = 0; i < fileBytes.length; i++) {
-            System.out.print((char) fileBytes[i]);
-        }
+        Huffman huff = new Huffman();
 
-        System.exit(0);
+        String filename = "testi1.txt";
+        //String filename = "testi_100.txt";
+        //String filename = "simpletest.txt";
 
+        byte[] fileBytes = Filehandler.readFileAsBytes(filename);
+        String huffEncoded = huff.compress(fileBytes);
+        byte[] decodedBytes = huff.decompress(huffEncoded);
 
-        int n = 10000; // Length of the string
+        System.out.println();
+        System.out.println("[INFO] Read1 " + fileBytes.length + " bytes.");
+        System.out.println("RESULT");
+        System.out.println("------");
+        System.out.println("ORIGINAL:        " + Arrays.toString(fileBytes));
+        System.out.println("ENCODED/DECODED: " + Arrays.toString(decodedBytes));
+        System.out.println("ARRAYS EQUALS: " + Arrays.equals(fileBytes, decodedBytes));
 
-        Random random = new Random();
-        PriorityQueue<Node> minQue = new PriorityQueue();
+        //for (int i = 0; i < fileBytes.length; i++) {
+        //    System.out.print((char) fileBytes[i]);
+        //}
 
-        // String as chararray
-        char[] charArray = generateTestString(n, random);
-        // Map holding char/freq key-val pairs
-        Map<Character, Integer> freqs = calculateFrequencies(charArray);
-
-        for (Map.Entry<Character, Integer> kv : freqs.entrySet()) {
-            Node node = new Node();
-            node.c = kv.getKey();
-            node.frequency = kv.getValue();
-            node.left = null;
-            node.right = null;
-            minQue.add(node);
-        }
-
-
-        Node root = null;
-        while (minQue.size() > 1) {
-            Node x = minQue.peek();
-            minQue.poll();
-
-            Node y = minQue.peek();
-            minQue.poll();
-
-            Node f = new Node();
-            f.frequency = x.frequency + y.frequency;
-
-            f.c = '-';
-
-            f.left = x;
-            f.right = y;
-
-            root = f;
-
-            minQue.add(f);
-        }
-
-        System.out.println("");
-        //Huffman.printCode(root, "");
-        String testStr = "This is an string to be compressed into a very tiny object!.... MAYBE.\nsomeday. hopefully. abcdefghijklmnopqrstuvwxyzåäöÖÄÅASFA\n1234567890!\"#¤%&/()=?'";
-        Huffman huffman = new Huffman();
-        huffman.readStr(testStr);
-        System.out.println("");
-        System.out.println("VERSION " + System.getProperty("java.version"));
+        //Filehandler.writeFileFromBytes("output_100oikea.txt", fileBytes);
     }
 
 
@@ -84,11 +46,11 @@ public class Main {
 
         for (int i = 0; i < charArr.length; i++) {
             char s = charArr[i];
-            freqs.put(s, freqs.getOrDefault(s, 0)+1);
+            freqs.put(s, freqs.getOrDefault(s, 0) + 1);
         }
 
         System.out.println("[INFO] Frequencies of the symbols in the string are as following:");
-        freqs.forEach((k,v) -> {
+        freqs.forEach((k, v) -> {
             System.out.println(k + ": " + v);
         });
         return freqs;
