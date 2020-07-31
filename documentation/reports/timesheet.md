@@ -6,3 +6,4 @@
 | 25.7.2020 | 3     | Coded a bit more, Basic huffmancoding implemented |
 | 28.7.2020 | 1     | Gradle configuration |
 | 29.7.2020 | 2     | Gradle configuration, checkstyle |
+| 31.7.2020 | 3     | Read & write binary files, refactored huffman to handle bytes |
