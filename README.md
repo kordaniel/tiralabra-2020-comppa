@@ -17,10 +17,27 @@ Comppa does not use any ready made data structures or algorithms, not from Java 
 * Releases will be published here
 
 ### Gradle
+Gradle is included in this repository. All the following commands assume you use the gradlew-binary, which is located inside the comppa-directory. If some of the commands fails to execute, run `./gradlew clean` and try again.  
+
+#### Unittests
+Unittests can be run with the following command
+```
+./gradlew test
+```
+This command will generate a report with the output of the tests into `comppa/build/reports/tests/test/index.html`  
+
+#### Test coverage report
+Test coverage report can be generated with the following command utilizing Jacoco
+```
+./gradlew jacocoTestReport
+```
+This command will genereate a report with the details into `comppa/build/reports/jacoco/test/html/index.html`  
+
+#### Checkstyle report
 Checkstyle reports can be generated with the following commands
 ```
 ./gradlew check
 ./gradlew checkstyleMain
 ./gradlew checkstyleTest
 ```
-using the gradlew-binary inside the comppa-directory.
+These commands will generate reports inside the directory `comppa/build/reports/checkstyle/`. For example the `./gradlew check` command will generate an HTML-formatted report called `main.html`
