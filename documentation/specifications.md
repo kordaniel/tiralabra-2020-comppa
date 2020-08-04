@@ -1,16 +1,18 @@
 # Project definition
-Comppa is a project that will do lossless compression and decompression of textual files (most likely binary as well). There will be comparisons between the different algorithms, containing atleast the size of the resulting compressed file, as well as an comparison between the speed of compression and decompression using the different algorithms. If time permits, I will possibly look into compressing/decompressing binary files (images at least) and also using lossy compression algorithms.
+Comppa is a project that will do lossless compression and decompression of files of any type using different algorithms. There will be comparisons between the different algorithms, containing atleast the size of the resulting compressed file, as well as an comparison between the speed of compression and decompression using the different algorithms. If time permits, I will possibly look into compressing/decompressing files using lossy compression algorithms.
 
 ## Features
-* Compression and decompression of textual files utilizing several different algorithms
+* Compression and decompression of any files utilizing several different algorithms
+* Files are prosessed in binary mode utilizing bytes
 
 ## Possible features
-* Compression of binaryfiles / images
 * Encryption
 * Exploring lossy compression algorithms
   * Compare the size and speed of these in relation to the lossless algos
 
 ## Algorithms and data structures
+* BitArray
+  * Huffman needs an bitarray. Will look into the subject and decide what data structure would be suitable to use.
 * Priority queue utilizing a binary heap. We will use the priority queue as a min queue.
   * Time complexity of different operations:
   * Getting the "first" (smallest) element: O(1)
@@ -18,10 +20,10 @@ Comppa is a project that will do lossless compression and decompression of textu
 
 * Huffman coding
   * Produces an optimal binary prefix code
-  * Uses the priority queue
+  * Uses the bitarray and also the priority queue
   * Uses a probability distribution over the source alphabet and maps the the most frequent symbols to the shortest codewords (compressed alphabet)
   * Creates an Huffman tree where the nodes are the symbols with their optimal prefix codes
-  * Total time complexity of the Huffman code utilizing the priority queue is O(n log n), where n is the length of the input alphabet
+  * Total time complexity of the Huffman code utilizing the priority queue is O(n log m), where m is the length of the input in bytes and n is the length of the input alphabet
 
 * More details including algorithms will be added later
 
