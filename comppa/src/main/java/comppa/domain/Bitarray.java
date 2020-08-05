@@ -118,7 +118,7 @@ public class Bitarray {
         int ri = -1; // Reverse index for filling arr from end towards beginning.
 
         for (int i = 0; i < getSize(); i++) {
-            ri = (strSize-1) - (i+o);
+            ri = (strSize - 1) - (i + o);
             if (i % 8 == 0 && i != 0) {
                 // Insert space between bytes.
                 bitValues[ri] = ' ';
@@ -167,7 +167,7 @@ public class Bitarray {
      * @return The minimum size of the array to store size bits.
      */
     private int computeNeededLength(int size) {
-        return ((size-1) / DATA_WIDTH) + 1;
+        return ((size - 1) / DATA_WIDTH) + 1;
     }
 
     /**
