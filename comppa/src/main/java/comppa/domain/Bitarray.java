@@ -153,8 +153,8 @@ public class Bitarray implements Cloneable {
     /**
      * Compares this object with the one given as argument.
      * The two objects are considered to be equal, if and only if
-     * they both are instances of Bitarray-class and both references'
-     * have equal field variables.
+     * they both are either instances of Bitarray-class with equal
+     * filled variables, or both references are null.
      * @param o The object to compare this object to.
      * @return True, if the objects are equal, false otherwise.
      */
