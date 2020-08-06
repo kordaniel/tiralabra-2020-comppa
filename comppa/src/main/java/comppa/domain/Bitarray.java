@@ -1,5 +1,7 @@
 package comppa.domain;
 
+import java.util.Arrays;
+
 /**
  * A class that provides methods for manipulating single bits.
  * All methods for manipulating or examining individual bits take
@@ -7,7 +9,7 @@ package comppa.domain;
  * For space complexity the overhead is at most 63 bits.
  * @author danielko
  */
-public class Bitarray {
+public class Bitarray implements Cloneable {
 
     public static final int DEF_SIZE   = 64; // Default size of the bitarray, in bits
 
@@ -110,7 +112,7 @@ public class Bitarray {
      */
     @Override
     public String toString() {
-        // Add room for spaces betwen bytes.
+        // Add room for spaces between bytes.
         int strSize = getSize() + (getSize() / 8 - 1);
         char[] bitValues = new char[strSize];
 
@@ -131,6 +133,21 @@ public class Bitarray {
         }
 
         return new String(bitValues);
+    }
+
+    /**
+     * Method that implements the Cloneable interface. Returns a
+     * deep copy of this object. That is the returned clone will
+     * be equal to the original object, but will have it's own
+     * independent fields.
+     * @return Deep copy of this Bitarray object.
+     * @throws CloneNotSupportedException
+     */
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Bitarray clone = (Bitarray) super.clone();
+        clone.bits = Arrays.copyOf(this.bits, this.length);
+        return clone;
     }
 
     /* THIS IS NOT A JAVADOC SO WE NEED TO ADD TEXT HERE*
