@@ -1,11 +1,16 @@
 package comppa.domain;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import java.util.BitSet;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 
 public class BitarrayTest {
 
@@ -149,6 +154,101 @@ public class BitarrayTest {
         String expected = "10000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000";
         bitarray.setBit(63);
         assertEquals(expected, bitarray.toString());
+    }
+
+    @Test
+    public void equalsIsTrueForSameObject() {
+        assertTrue(bitarray.equals(bitarray));
+    }
+
+    @Test
+    public void equalsIsTrueForTwoEmptyObjects() {
+        Bitarray other = new Bitarray();
+        assertTrue(bitarray.equals(other));
+        assertTrue(other.equals(bitarray));
+    }
+
+    @Test
+    public void equalsIsFalseForNullObject() {
+        assertFalse(bitarray.equals(null));
+    }
+
+    @Test
+    public void equalsIsFalseForOtherClass() {
+        assertFalse(bitarray.equals(new BitSet()));
+    }
+
+    @Test
+    public void equalsIsTrueForTwoIdenticalObjects() {
+        Bitarray other = new Bitarray();
+
+        for (int i = 0; i < bitarray.getSize(); i+= 7) {
+            bitarray.setBit(i);
+            other.setBit(i);
+        }
+        for (int i = 7; i < 14; i++) {
+            bitarray.unsetBit(i);
+            other.unsetBit(i);
+        }
+
+        assertTrue(bitarray.equals(other));
+        assertTrue(other.equals(bitarray));
+    }
+
+    @Test
+    public void equalsIsFalseForDiffSizeWithSameContent() {
+        Bitarray other = new Bitarray(192);
+
+        int[] setBits = {0, 10, 11, 23, 48, 62, 63};
+        for (int i : setBits) {
+            bitarray.setBit(i);
+            other.setBit(i);
+        }
+
+        assertFalse(bitarray.equals(other));
+        assertFalse(other.equals(bitarray));
+    }
+
+    @Test
+    public void cloneReturnsNewObject() throws CloneNotSupportedException {
+        Bitarray clonedObj = (Bitarray) bitarray.clone();
+        assertTrue(clonedObj != bitarray);
+    }
+
+    @Test
+    public void cloneReturnsBitarray() throws CloneNotSupportedException {
+        Bitarray clonedObj = (Bitarray) bitarray.clone();
+        assertTrue(clonedObj instanceof Bitarray);
+    }
+
+    @Test
+    public void cloneReturnsEqualBitarray() throws CloneNotSupportedException {
+        bitarray.setBit(0);
+        bitarray.setBit(1);
+        bitarray.setBit(48);
+        bitarray.setBit(63);
+        Bitarray clonedObj = (Bitarray) bitarray.clone();
+        assertTrue(bitarray.equals(clonedObj));
+    }
+
+    @Test
+    public void cloneReturnsDeepCopy() throws CloneNotSupportedException {
+        bitarray.setBit(1);
+        bitarray.setBit(5);
+        Bitarray clonedObj = (Bitarray) bitarray.clone();
+        assertEquals(bitarray, clonedObj);
+
+        clonedObj.unsetBit(5);
+        clonedObj.setBit(2);
+        assertNotEquals(bitarray, clonedObj);
+
+        assertTrue(bitarray.getBit(1));
+        assertFalse(bitarray.getBit(2));
+        assertTrue(bitarray.getBit(5));
+
+        assertTrue(clonedObj.getBit(1));
+        assertTrue(clonedObj.getBit(2));
+        assertFalse(clonedObj.getBit(5));
     }
 
     private void setIOoBExceptionExpectation(int index, int bitArrSize) {

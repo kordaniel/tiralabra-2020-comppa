@@ -150,6 +150,31 @@ public class Bitarray implements Cloneable {
         return clone;
     }
 
+    /**
+     * Compares this object with the one given as argument.
+     * The two objects are considered to be equal, if and only if
+     * they both are instances of Bitarray-class and both references'
+     * have equal field variables.
+     * @param o The object to compare this object to.
+     * @return True, if the objects are equal, false otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || this.getClass() != o.getClass()) {
+            return false;
+        }
+
+        Bitarray other = (Bitarray) o;
+        return this.length == other.length &&
+                this.size == other.size &&
+                this.maxBit == other.maxBit &&
+                Arrays.equals(this.bits, other.bits);
+    }
+
     /* THIS IS NOT A JAVADOC SO WE NEED TO ADD TEXT HERE*
      * Resizes the bitarray and updates all object fields
      * to match the new size. Resizes to the smallest
