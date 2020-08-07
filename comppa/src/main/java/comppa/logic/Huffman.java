@@ -23,6 +23,21 @@ public class Huffman {
         this.rootNode = null;
     }
 
+    public Bitarray compressBArr(byte[] input) {
+        int[] frequencies = calculateBytesFrequencies(input);
+        this.rootNode = buildTrie(frequencies);
+
+        String[] huffmanCode = new String[byteSize];
+        Bitarray[] huffmanCodes = new Bitarray[byteSize];
+        Bitarray huffCode = new Bitarray();
+
+        int depth = -1;
+        buildHuffmanCode(depth, huffCode, huffmanCode, huffmanCodes, rootNode, "");
+        Bitarray huffEncodedBits = huffmanEncodeBitArray(input, huffmanCodes);
+
+        return huffEncodedBits;
+    }
+
     public String compress(byte[] input) {
         int[] frequencies = calculateBytesFrequencies(input);
         this.rootNode = buildTrie(frequencies);
@@ -37,6 +52,7 @@ public class Huffman {
         String huffEncoded = huffmanEncode(input, huffmanCode);
         Bitarray huffEncodedBits = huffmanEncodeBitArray(input, huffmanCodes);
 
+        /*
         System.out.println();
         System.out.println("Huffman encoded the input:");
         System.out.println("---------------");
@@ -45,6 +61,7 @@ public class Huffman {
         System.out.println("LENGTH of bits in huffmanEncoded: " + huffEncoded.length());
         System.out.println("LENGTH of bits in huffmanEncodedBArr: " + huffEncodedBits.getMostSignificantBit());
         System.out.println("---------------");
+         */
         int eriBittienMaara = 0;
         for (int i = 0; i < byteSize; i++) {
             if (huffmanCode[i] == null || huffmanCode[i].isEmpty()) {
@@ -57,11 +74,13 @@ public class Huffman {
                 continue;
             }
             eriBittienMaara++;
+            /*
             System.out.println();
             System.out.println(huffmanCode[i]);
             System.out.println(huffmanCodes[i]);
             System.out.print(huffmanCode[i].length() == huffmanCodes[i].getMostSignificantBit()+1);
             System.out.println(" " + huffmanCode[i].length() + " = " + (huffmanCodes[i].getMostSignificantBit()+1));
+            */
             if (huffmanCode[i].length() != huffmanCodes[i].getMostSignificantBit()+1) {
                 System.out.println("ERRRRRRRRRRRRRRROR");
             } else {
@@ -71,11 +90,14 @@ public class Huffman {
                     if (strBit != bArrBit) {
                         System.out.println("EEEEEEEEEEEEERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRROOOOOOOOOOOOOOOOOOOORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
                     }
+                    // DEBUG
+                    continue;
                 }
             }
         }
         System.out.println("IN TOTAL " + eriBittienMaara + " DIFFERENT BYTES");
         System.out.println("---------------");
+
         System.out.println(("HUFFCODE " + huffCode));
 
         System.out.println("");
@@ -107,6 +129,41 @@ public class Huffman {
         }
 
         return decodedBytes;
+    }
+
+    public byte[] decompressBitArr(Bitarray huffEncoded) {
+        ArrayList<Byte> bytes = new ArrayList<>();
+        int indx = -1;
+        while (indx < huffEncoded.getMostSignificantBit() - 1) {
+            indx = huffmanDecode(rootNode, indx, huffEncoded, bytes);
+        }
+
+        byte[] decodedBytes = new byte[bytes.size()];
+        for (int i = 0; i < bytes.size(); i++) {
+            decodedBytes[i] = bytes.get(i);
+        }
+
+        return decodedBytes;
+    }
+
+    private int huffmanDecode(HuffmanNode node,  int indx, Bitarray huffEncoded, List<Byte> decodedBytes) {
+        if (node == null) {
+            return indx;
+        }
+        if (node.isLeaf()) {
+            decodedBytes.add(node.getNodeByte());
+            return indx;
+        }
+
+        indx++;
+
+        if (!huffEncoded.getBit(indx)) {
+            indx = huffmanDecode(node.getLeft(), indx, huffEncoded, decodedBytes);
+        } else {
+            indx = huffmanDecode(node.getRight(), indx, huffEncoded, decodedBytes);
+        }
+
+        return indx;
     }
 
     private int huffmanDecode(HuffmanNode node, int indx, String huffEncoded, List<Byte> decodedBytes) {
