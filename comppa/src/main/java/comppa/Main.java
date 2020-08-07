@@ -16,43 +16,27 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
-        Bitarray bitarray = new Bitarray(128);
-
-        for (int i = 0; i < 128; i++) {
-            bitarray.setBit(i);
-            System.out.println(i + ": " + bitarray);
-            bitarray.unsetBit(i);
-        }
-        //System.out.println(bitarray);
-        System.exit(0);
-
-        for (int i = 0; i < 64; i++) {
-            System.out.println();
-            System.out.println("i = " + i);
-            bitarray.setBit(i);
-            //bitarray.printBits();
-            //bitarray.unsetBit(i);
-        }
-
-        System.exit(0);
         Huffman huff = new Huffman();
 
-        String filename = "testi1.txt";
+        //String filename = "testi1.txt";
         //String filename = "testi_100.txt";
-        //String filename = "simpletest.txt";
+        String filename = "simpletest.txt";
 
         byte[] fileBytes = Filehandler.readFileAsBytes(filename);
         String huffEncoded = huff.compress(fileBytes);
         byte[] decodedBytes = huff.decompress(huffEncoded);
 
-//        System.out.println();
-//        System.out.println("[INFO] Read1 " + fileBytes.length + " bytes.");
-//        System.out.println("RESULT");
-//        System.out.println("------");
-//        System.out.println("ORIGINAL:        " + Arrays.toString(fileBytes));
-//        System.out.println("ENCODED/DECODED: " + Arrays.toString(decodedBytes));
-//        System.out.println("ARRAYS EQUALS: " + Arrays.equals(fileBytes, decodedBytes));
+        System.out.println();
+        System.out.println("[INFO] Read1 " + fileBytes.length + " bytes.");
+        System.out.println("RESULT");
+        System.out.println("------");
+        System.out.println("ORIGINAL:        " + Arrays.toString(fileBytes));
+        System.out.println("ENCODED/DECODED: " + Arrays.toString(decodedBytes));
+        System.out.println();
+        System.out.println("------");
+        System.out.println("ARRAYS EQUALS: " + Arrays.equals(fileBytes, decodedBytes));
+        System.out.println("ORIGINAL SIZE  : " + fileBytes.length);
+        System.out.println("COMPDECOMP SIZE: " + decodedBytes.length);
 
         //for (int i = 0; i < fileBytes.length; i++) {
         //    System.out.print((char) fileBytes[i]);
