@@ -8,7 +8,7 @@ package comppa.domain;
  */
 public class ByteBuffer {
 
-    private static byte BYTE_WIDTH = 8;
+    private static final byte BYTE_WIDTH = 8;
 
     private byte buff;
     private byte bitsCount;
