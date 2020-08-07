@@ -19,6 +19,13 @@ Comppa does not use any ready made data structures or algorithms, not from Java 
 ### Gradle
 Gradle is included in this repository. All the following commands assume you use the gradlew-binary, which is located inside the comppa-directory. If some of the commands fails to execute, run `./gradlew clean` and try again.  
 
+### Running the application
+Run the application with the following command
+```
+./gradlew run --args="<filename>"
+```
+Where `<filename>` is the name of the file to be compressed  
+
 #### Unittests
 Unittests can be run with the following command
 ```
