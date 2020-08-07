@@ -1,11 +1,15 @@
 package comppa.logic;
 
+import comppa.domain.Bitarray;
 import comppa.domain.HuffmanNode;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
+
+/**
+ *
+ * @author danielko
+ */
 public class Huffman {
 
     // 24 non set bits and 8 set
@@ -13,10 +17,10 @@ public class Huffman {
     // Signed 16-bit two's complement integer
     private static final short byteSize = 1 << 8;
 
-    private HuffmanNode rootNode = null;
+    private HuffmanNode rootNode;
 
     public Huffman() {
-        //
+        this.rootNode = null;
     }
 
     public String compress(byte[] input) {
@@ -24,8 +28,14 @@ public class Huffman {
         this.rootNode = buildTrie(frequencies);
 
         String[] huffmanCode = new String[byteSize];
-        buildHuffmanCode(huffmanCode, rootNode, "");
+        Bitarray[] huffmanCodes = new Bitarray[byteSize];
+        Bitarray huffCode = new Bitarray();
+
+        int depth = -1;
+        buildHuffmanCode(depth, huffCode, huffmanCode, huffmanCodes, rootNode, "");
+
         String huffEncoded = huffmanEncode(input, huffmanCode);
+        Bitarray huffEncodedBits = huffmanEncodeBitArray(input, huffmanCodes);
 
         System.out.println();
         System.out.println("Huffman encoded the input:");
@@ -33,7 +43,53 @@ public class Huffman {
         System.out.println("LENGTH of original bytesArr     : " + input.length);
         System.out.println("LENGTH of bits in original      : " + (input.length * 8));
         System.out.println("LENGTH of bits in huffmanEncoded: " + huffEncoded.length());
+        System.out.println("LENGTH of bits in huffmanEncodedBArr: " + huffEncodedBits.getMostSignificantBit());
         System.out.println("---------------");
+        int eriBittienMaara = 0;
+        for (int i = 0; i < byteSize; i++) {
+            if (huffmanCode[i] == null || huffmanCode[i].isEmpty()) {
+                if (huffmanCodes[i] != null) {
+                    System.out.println();
+                    System.out.println("ERRRRRRRRRRRRRROR");
+                    System.out.println(huffmanCode[i]);
+                    System.out.println(huffmanCodes[i]);
+                }
+                continue;
+            }
+            eriBittienMaara++;
+            System.out.println();
+            System.out.println(huffmanCode[i]);
+            System.out.println(huffmanCodes[i]);
+            System.out.print(huffmanCode[i].length() == huffmanCodes[i].getMostSignificantBit()+1);
+            System.out.println(" " + huffmanCode[i].length() + " = " + (huffmanCodes[i].getMostSignificantBit()+1));
+            if (huffmanCode[i].length() != huffmanCodes[i].getMostSignificantBit()+1) {
+                System.out.println("ERRRRRRRRRRRRRRROR");
+            } else {
+                for (int j = 0; j <= huffmanCodes[i].getMostSignificantBit(); j++) {
+                    boolean strBit = huffmanCode[i].charAt(j) == '1' ? true : false;
+                    boolean bArrBit = huffmanCodes[i].getBit(j);
+                    if (strBit != bArrBit) {
+                        System.out.println("EEEEEEEEEEEEERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRROOOOOOOOOOOOOOOOOOOORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
+                    }
+                }
+            }
+        }
+        System.out.println("IN TOTAL " + eriBittienMaara + " DIFFERENT BYTES");
+        System.out.println("---------------");
+        System.out.println(("HUFFCODE " + huffCode));
+
+        System.out.println("");
+        System.out.println("");
+        System.out.println("------------------");
+        System.out.println(huffEncodedBits);
+        System.out.println(huffEncoded);
+        String huffffffffff = "";
+        for (int i = 0; i <=huffEncodedBits.getMostSignificantBit(); i++) {
+            huffffffffff += huffEncodedBits.getBit(i) ? '1' : '0';
+        }
+        System.out.println(huffffffffff);
+        System.out.println("HUFFENCODED STRINGS MATCH: " + huffEncoded.matches(huffffffffff));
+
         return huffEncoded;
     }
 
@@ -87,14 +143,46 @@ public class Huffman {
         return huffEncoded.toString();
     }
 
-    private void buildHuffmanCode(String[] str, HuffmanNode node,  String s) {
+    private Bitarray huffmanEncodeBitArray(byte[] bytes, Bitarray[] huffmanCode) {
+        Bitarray huffEncoded = new Bitarray();
+
+        for (int i = 0; i < bytes.length; i++) {
+            huffEncoded.appendBits(huffmanCode[byteToUnsignedInt(bytes[i])]);
+        }
+
+        return huffEncoded;
+    }
+
+    private void buildHuffmanCode(int depth, Bitarray huffCode,
+                                  String[] str, Bitarray[] huffCodes,
+                                  HuffmanNode node,  String s) {
         if (node.isLeaf()) {
-            str[byteToUnsignedInt(node.getNodeByte())] = s;
+            int index = byteToUnsignedInt(node.getNodeByte());
+            if (huffCodes[index] != null) {
+                throw new RuntimeException("Found a bitset that should not exist!!");
+            }
+
+            str[index] = s;
+            Bitarray nodeHuffCode = null;
+            try {
+                nodeHuffCode = (Bitarray) huffCode.clone();
+            } catch (CloneNotSupportedException e) {
+                System.out.println(e.getMessage());
+            }
+            nodeHuffCode.setMostSignificantBit(depth);
+            huffCodes[index] = nodeHuffCode;
+
             return;
         }
 
-        buildHuffmanCode(str, node.getLeft(), s + '0');
-        buildHuffmanCode(str, node.getRight(), s + '1');
+        depth++;
+
+        huffCode.unsetBit(depth); // This should be an unecessary operation since we set the most significant bit later
+                                  // in the recursion!  ..?
+        buildHuffmanCode(depth, huffCode, str, huffCodes, node.getLeft(), s + '0');
+
+        huffCode.setBit(depth);
+        buildHuffmanCode(depth, huffCode, str, huffCodes, node.getRight(), s + '1');
     }
 
     private HuffmanNode buildTrie(int[] bytesFrequencies) {

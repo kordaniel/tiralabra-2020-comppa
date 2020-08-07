@@ -26,6 +26,10 @@ public class Bitarray implements Cloneable {
     }
 
     public Bitarray(int initialSize) {
+        if (initialSize < 1) {
+            throw new IllegalArgumentException("Cannot instantiate Bitarray with size less than 1");
+        }
+
         this.length = computeNeededLength(initialSize);
         this.size   = this.length * DATA_WIDTH;
         this.maxBit = -1;
@@ -38,14 +42,12 @@ public class Bitarray implements Cloneable {
      * @throws IndexOutOfBoundsException If bitIndex is negative or out of bounds for the instance of this object.
      */
     public void setBit(int bitIndex) {
-        // @TODO: If we get an bitIndex argument, that is larger than what will fit in the current bits-array
-        //        either resize the array (if needed) or create tests that the correct exception is thrown.
         if (!isValidIndex(bitIndex)) {
             throw new IndexOutOfBoundsException(
-                "Index " + bitIndex + " out of bounds for this Bitarray with the size of " + this.size
+                "ERRRRRRRRRRRRRRRRRRR this should never be thrown"
             );
         }
-        if (bitIndex > this.maxBit) {
+        if (bitIndex > this.getMostSignificantBit()) {
             this.maxBit = bitIndex;
         }
 
@@ -58,18 +60,41 @@ public class Bitarray implements Cloneable {
      * @throws IndexOutOfBoundsException If bitIndex is negative or out of bounds for the instance of this object.
      */
     public void unsetBit(int bitIndex) {
-        // @TODO: If we get an bitIndex argument, that is larger than what will fit in the current bits-array
-        //        either resize the array (if needed) or create tests that the correct exception is thrown.
         if (!isValidIndex(bitIndex)) {
             throw new IndexOutOfBoundsException(
-                "Index " + bitIndex + " out of bounds for this Bitarray with the size of " + this.size
+                "ERRRRRRRRRRRRRRRRRRR this should never be thrown when unsetting bit..!"
             );
         }
-        if (bitIndex > this.maxBit) {
+        if (bitIndex > this.getMostSignificantBit()) {
             this.maxBit = bitIndex;
         }
 
         this.bits[calcIndexForArray(bitIndex)] &= ~(1L << calcIndexForLong(bitIndex));
+    }
+
+    /**
+     * "Appends" a new bit to the bitarray. That is sets the next bit to the left (the "bigger" bit)
+     * from the current mostSignificant altered bit to be 1 or 0 depending on the
+     * bitIsSet parameter boolean value passed as argument.
+     * @param bitIsSet Whether the bit should be set to 1 or 0. Sets the bit to 1 if passed
+     *                 true and 0 if passed false.
+     */
+    public void appendBit(boolean bitIsSet) {
+        if (bitIsSet) {
+            this.setBit(this.getMostSignificantBit() + 1);
+        } else {
+            this.unsetBit(this.getMostSignificantBit() + 1);
+        }
+    }
+
+    /**
+     * Appends all the bits from the Bitarray passed as argument to this Bitarray.
+     * @param bArr The object whose bits should be appended to this Bitarray.
+     */
+    public void appendBits(Bitarray bArr) {
+        for (int i = 0; i <= bArr.getMostSignificantBit(); i++) {
+            this.appendBit(bArr.getBit(i));
+        }
     }
 
     /**
@@ -79,7 +104,7 @@ public class Bitarray implements Cloneable {
      * @throws IndexOutOfBoundsException If bitIndex is negative or out of bounds for the instance of this object.
      */
     public boolean getBit(int bitIndex) {
-        if (!isValidIndex(bitIndex)) {
+        if (bitIndex < 0 || bitIndex >= this.getSize()) {
             throw new IndexOutOfBoundsException(
                 "Index " + bitIndex + " out of bounds for this Bitarray with the size of " + this.size
             );
@@ -102,6 +127,11 @@ public class Bitarray implements Cloneable {
      */
     public int getMostSignificantBit() {
         return this.maxBit;
+    }
+
+    public void setMostSignificantBit(int bitIndex) {
+        // @TODO: Implement necessary checks
+        this.maxBit = bitIndex;
     }
 
     /**
@@ -175,7 +205,7 @@ public class Bitarray implements Cloneable {
                 Arrays.equals(this.bits, other.bits);
     }
 
-    /* THIS IS NOT A JAVADOC SO WE NEED TO ADD TEXT HERE*
+    /**
      * Resizes the bitarray and updates all object fields
      * to match the new size. Resizes to the smallest
      * effective size that is at least as big as the
@@ -183,13 +213,12 @@ public class Bitarray implements Cloneable {
      * @param newSize The new desired size of the array. The new
      *                size will be between [newSize..newSize + 63] bits.
      */
-    /* THIS METHOD IS NOT YET TESTED NOR IN USE, "maybe needed later"
     private void expand(int newSize) {
         int newLength = computeNeededLength(newSize);
         newSize = newLength * DATA_WIDTH;
 
         long[] bitArr = new long[newLength];
-        for (int i = 0; i <= this.maxBit; i++) {
+        for (int i = 0; i <= this.calcIndexForArray(this.getMostSignificantBit()); i++) {
             // We could copy the old array, but if the class
             // works correctly, it is sufficient to copy only
             // up to the most significant bit that has been
@@ -201,7 +230,6 @@ public class Bitarray implements Cloneable {
         this.size = newSize;
         this.bits = bitArr;
     }
-*/
 
     /**
      * Computes the needed length for the array to store size amount of bits.
@@ -219,7 +247,7 @@ public class Bitarray implements Cloneable {
      * @return The index of the array that holds the wanted bit.
      */
     private int calcIndexForArray(int bitIndex) {
-        return bitIndex / 64;
+        return bitIndex / DATA_WIDTH;
     }
 
     /**
@@ -228,15 +256,37 @@ public class Bitarray implements Cloneable {
      * @return The index of the long that holds the wanted bit.
      */
     private int calcIndexForLong(int bitIndex) {
-        return bitIndex % 64;
+        return bitIndex % DATA_WIDTH;
     }
 
     /**
-     * Helper method that checks the index is in bounds.
+     * Helper method that checks the index is in bounds for this instance of BitArray.
+     * If the index is bigger than what this instance currently has room for,
+     * calculates a new size and enlarges the array of bits.
      * @param bitIndex Index of the desired bit.
      * @return true, if the index is a valid one and false otherwise.
+     * @throws IndexOutOfBoundsException If bitIndex is negative or out of bounds for the instance of this object.
      */
-    private boolean isValidIndex(int bitIndex) {
-        return bitIndex < this.size && bitIndex >= 0;
+    private boolean isValidIndex(int bitIndex) throws IndexOutOfBoundsException {
+        if (bitIndex < 0) {
+            // @TODO: Maybe we need negative indexing from the end, if so, calculate the correct index here
+            throw new IndexOutOfBoundsException(
+                    "Index " + bitIndex + " out of bounds for this Bitarray with the size of " + this.getSize()
+            );
+        }
+
+        if (bitIndex < this.getSize()) {
+            return true;
+        }
+
+        // @TODO: Add check for index growing too large
+        int newSize = this.getSize();
+        while (newSize <= bitIndex) {
+            newSize *= 2;
+        }
+        this.expand(newSize);
+
+
+        return bitIndex < this.getSize() && bitIndex >= 0;
     }
 }

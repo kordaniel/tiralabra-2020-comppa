@@ -27,6 +27,7 @@ public class HuffmanNode implements Comparable<HuffmanNode> {
         this.left  = left;
         this.right = right;
     }
+
     public int getFrequency() {
         return this.frequency;
     }
@@ -44,9 +45,14 @@ public class HuffmanNode implements Comparable<HuffmanNode> {
     }
 
     public boolean isLeaf() {
-        return this.left == null && this.right == null;
+        boolean isLeaf = this.left == null && this.right == null;
+        if (!isLeaf && (this.left == null || this.right == null)) {
+            // @TODO: DELETE THIS CHECK, only used while developing the software
+            throw new RuntimeException("Found a node with only one null child, ERRRRRRRRRRRRRRRROR!!!");
+        }
+        return isLeaf;
     }
-    
+
     @Override
     public int compareTo(HuffmanNode other) {
         return this.frequency - other.frequency;
