@@ -11,4 +11,5 @@
 | 04.08.2020 | 3     | Finish bitarray class, create tests for it |
 | 05.08.2020 | 1     | Started converting huffman to use bits instead of strings |
 | 06.08.2020 | 3     | Expand bitarray class, with tests. create stub for bytebuffer |
-| 07.08.2020 | 1     | Finish ByteBuffer, create tests for it. |
+| 07.08.2020 | 1     | Finish ByteBuffer, create tests for it |
+| 08.08.2020 | 0.5   | Docstrings for HuffmanNode |

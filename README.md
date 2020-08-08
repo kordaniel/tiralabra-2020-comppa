@@ -48,4 +48,11 @@ Checkstyle reports can be generated with the following commands
 ./gradlew checkstyleMain
 ./gradlew checkstyleTest
 ```
-These commands will generate reports inside the directory `comppa/build/reports/checkstyle/`. For example the `./gradlew check` command will generate an HTML-formatted report called `main.html` inside the mentioned directory.
+These commands will generate reports inside the directory `comppa/build/reports/checkstyle/`. For example the `./gradlew check` command will generate an HTML-formatted report called `main.html` inside the mentioned directory.  
+
+#### Javadoc
+Javadocs can be generated with the following command
+```
+./gradlew javadoc
+```
+This command will generate the javadocs into the directory `comppa/build/docs/javadoc/`. Open the file `comppa/build/docs/javadoc/index.html` to access all the generated javadocs.
