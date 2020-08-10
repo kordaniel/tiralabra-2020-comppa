@@ -22,6 +22,10 @@ public class HuffmanNode implements Comparable<HuffmanNode> {
 
     public HuffmanNode(byte nodeByte, int frequency,
                        HuffmanNode left, HuffmanNode right) {
+        if (frequency < 0) {
+            throw new IllegalArgumentException("Parameter frequency can not be negative.");
+        }
+
         this.nodeByte = nodeByte;
         this.frequency = frequency;
         this.left  = left;
@@ -80,10 +84,10 @@ public class HuffmanNode implements Comparable<HuffmanNode> {
     /**
      * This method implements the Comparable interface. Compares this object with the one passed as an
      * argument and returns an negative integer if the weight (frequency) of this node is less than the
-     * one that we are comparing it to. Similarily returns 0 or positive depending on the result of the
+     * one that we are comparing it to. Similarly returns 0 or positive depending on the result of the
      * comparison. That is the natural order of the nodes are so that the smallest one goes to the top.
      * @param other Node to compare this one against.
-     * @return <0 if this has a lower weight, 0 if they are equal and >0 if this one has a bigger weight.
+     * @return negative int if this has a lower weight, 0 if they are equal and positive int if this one has a bigger weight.
      */
     @Override
     public int compareTo(HuffmanNode other) {
