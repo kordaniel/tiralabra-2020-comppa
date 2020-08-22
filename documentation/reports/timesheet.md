@@ -16,5 +16,4 @@
 | 10.08.2020 | 0.5   | Add tests for HuffmanNode |
 | 21.08.2020 | 3     | Peer reviewing of an another course project |
 |            |       | |
-| ---------- | ----- | - |
-| Total      | 29    | |
+| **Total**  |**29** | |
