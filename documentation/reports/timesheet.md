@@ -13,3 +13,8 @@
 | 06.08.2020 | 3     | Expand bitarray class, with tests. create stub for bytebuffer |
 | 07.08.2020 | 1     | Finish ByteBuffer, create tests for it |
 | 08.08.2020 | 0.5   | Docstrings for HuffmanNode |
+| 10.08.2020 | 0.5   | Add tests for HuffmanNode |
+| 21.08.2020 | 3     | Peer reviewing of an another course project |
+|            |       | |
+| ---------- | ----- | - |
+| Total      | 29    | |
