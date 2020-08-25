@@ -98,6 +98,20 @@ public class Bitarray implements Cloneable {
     }
 
     /**
+     * Appends all the bits from the byte to this Bitarray.
+     * @param b The byte value whose bits should be appended to this Bitarray.
+     */
+    public void appendByteBits(byte b) {
+        for (int i = 0; i < Constants.BYTE_WIDTH; i++) {
+            if ((b & (1 << i)) != 0) {
+                appendBit(true);
+            } else {
+                appendBit(false);
+            }
+        }
+    }
+
+    /**
      * Get the value of the bit at the specified bitIndex.
      * @param bitIndex The index of the bit whose value is to be returned.
      * @return true, if the bit is set (has the value of 1 or is "true"), false otherwise.

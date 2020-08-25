@@ -1,6 +1,8 @@
 package comppa.logic;
 
 import comppa.domain.Bitarray;
+import comppa.domain.ByteBuffer;
+import comppa.domain.Constants;
 import comppa.domain.HuffmanNode;
 
 import java.util.*;
@@ -27,6 +29,22 @@ public class Huffman {
         int[] frequencies = calculateBytesFrequencies(input);
         this.rootNode = buildTrie(frequencies);
 
+        System.out.println("-------------");
+        Bitarray huffEncodedTrie = new Bitarray();
+        huffmanEncodeTrie(rootNode, huffEncodedTrie);
+
+        HuffmanNode rootNode2 = huffmanDecodeTrie(huffEncodedTrie, 0);
+
+
+        printTrie(this.rootNode);
+        System.out.println();
+        System.out.println("===========");
+        System.out.println();
+        printTrie(rootNode2);
+        for (int i = 0; i < 5; i++) {
+            System.out.println();
+        }
+        System.out.println("-------------");
         Bitarray[] huffmanCodes = new Bitarray[byteSize];
         Bitarray huffmanCode = new Bitarray();
 
@@ -37,6 +55,14 @@ public class Huffman {
         return huffEncodedBits;
     }
 
+    private void printTrie(HuffmanNode node) {
+        if (node.isLeaf()) {
+            System.out.println(node);
+        } else {
+            printTrie(node.getLeft());
+            printTrie(node.getRight());
+        }
+    }
     public byte[] decompress(Bitarray huffEncoded) {
         ArrayList<Byte> bytes = new ArrayList<>();
 
@@ -83,6 +109,39 @@ public class Huffman {
         }
 
         return huffEncoded;
+    }
+
+    private void huffmanEncodeTrie(HuffmanNode node, Bitarray encodedTrie) {
+        if (!node.isLeaf()) {
+            encodedTrie.appendBit(false);
+            huffmanEncodeTrie(node.getLeft(), encodedTrie);
+            huffmanEncodeTrie(node.getRight(), encodedTrie);
+        } else {
+            //leaf node
+            encodedTrie.appendBit(true);
+            encodedTrie.appendByteBits(node.getNodeByte());
+        }
+    }
+
+    private HuffmanNode huffmanDecodeTrie(Bitarray encodedTrie, int index) {
+        if (encodedTrie.getBit(index)) {
+            // leaf node
+            ByteBuffer byteBuffer = new ByteBuffer();
+
+            for (int i = 1; i <= Constants.BYTE_WIDTH; i++) {
+                byteBuffer.append(encodedTrie.getBit(index + i));
+            }
+
+            byte currByte = byteBuffer.getCurrentByte();
+            System.out.println("DECODING TRIE, byte: " + currByte);
+
+            return new HuffmanNode(currByte);
+        }
+
+        // internal node
+        HuffmanNode leftChild = huffmanDecodeTrie(encodedTrie, index + 1);
+        HuffmanNode rightChild = huffmanDecodeTrie(encodedTrie, index + 10);
+        return new HuffmanNode(0, leftChild, rightChild);
     }
 
     private void buildHuffmanCode(int depth, Bitarray huffmanCode,
@@ -152,7 +211,7 @@ public class Huffman {
     }
 
     private byte unsignedIntToByte(int i) {
-        if (i < byteSize) {
+        if (i >= 0 && i < byteSize) {
             return (byte) i;
         }
 

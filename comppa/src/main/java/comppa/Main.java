@@ -1,6 +1,8 @@
 package comppa;
 
 import comppa.domain.Bitarray;
+import comppa.domain.Constants;
+import comppa.domain.HuffmanNode;
 import comppa.io.Filehandler;
 import comppa.logic.Huffman;
 

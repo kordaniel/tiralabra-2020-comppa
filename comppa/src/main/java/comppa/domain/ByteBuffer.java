@@ -22,7 +22,7 @@ public class ByteBuffer {
     }
 
     /**
-     * Appends one bit to the right of the byte. If passed bitIsSet
+     * @TODO: FAULTY DOCSTRING FIX FIX FIX FIXAppends one bit to the right of the byte. If passed bitIsSet
      * argument true, sets the bit to be 1. If false sets the bit to 0.
      * @param bitIsSet Value of the bit to be appended.
      * @return true, if the byte is full, or in other words every bit is appended to it. False otherwise.
@@ -33,12 +33,13 @@ public class ByteBuffer {
             throw new RuntimeException("Trying to append a bit to a full byte!");
         }
 
-        bitsCount++;
-        this.buff <<= 1;
-
         if (bitIsSet) {
-            this.buff |= 1;
+            this.buff |= (1 << bitsCount);
         }
+
+        bitsCount++;
+
+        //this.buff <<= 1;
 
         return isFull();
     }
@@ -59,7 +60,7 @@ public class ByteBuffer {
      * @return true, if all the bits in this buffer is appended, false otherwise.
      */
     public boolean isFull() {
-        return this.bitsCount == 8;
+        return this.bitsCount == Constants.BYTE_WIDTH;
     }
 
 }

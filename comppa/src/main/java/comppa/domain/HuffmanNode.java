@@ -12,6 +12,10 @@ public class HuffmanNode implements Comparable<HuffmanNode> {
     private int  frequency;
     private HuffmanNode left, right;
 
+    public HuffmanNode(byte nodeByte) {
+        this(nodeByte, 0, null, null);
+    }
+
     public HuffmanNode(byte nodeByte, int frequency) {
         this(nodeByte, frequency, null, null);
     }
