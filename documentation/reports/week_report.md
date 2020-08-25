@@ -1,5 +1,15 @@
 # Viikkoraportit
 
+## [Viikko 5](#viikko-5)
+Tällä viikolla tein ainoastaan vertaisarvionnin. Aikaa käytin tähän noin 3h.
+
+Erinäisistä syistä nyt parin viikon aikana en ole onnistunut löytämään tarpeeksi aikaa ja motivaatiota edistää projektia. Haluan kuitenkin tehdä kurssin loppuun ja toivottavasti hyväksyttävästi, joten nyt viikolla 6 aion jatkaa projektia. Koska mikään ei ole oikein edennyt, niin viikon 3 raportti pätee yhä.
+
+Sain vertaisarvionnissa ihan hyvän linkin siitä, miten voisin tallentaa tuon huffmanin puun. Yritän implementoida sen ensin itsenäisesti, ja jos sitten koen asialle vielä tarvetta, niin voisin yrittää varata zoom-palaverin (kuten ohjaajan palautteessa viikolla 3 luki).  
+
+## [Viikko 4](#viikko-4)
+Ei edistystä. Puoli tuntia käytetty testien tekemiseen.
+
 ## [Viikko 3](#viikko-3)
 Tällä viikolla oli tarkoitus viimeistellä HuffMan-koodaus ja saada sille aikaan testit. Koska päätin jo tässä vaiheessa keskittyä käsittelemeään tiedostoja binäärimuodossa tekstimuodon sijaan, niin kävikin niin, että en saanut sitä ihan valmiiksi. Huffman-koodaus kyllä toimii, kuten myös koodauksen purku, seuraavaksi pitää keksiä miten merkkien prefix-/frekvenssi-puun saisi sellaiseen muotoon, että voisin luoda pakattuja tiedostoja siten, että ne saisi myös purettua. Sen sijaan loin Bitarray-luokan, eli bittivektorin, jonka avulla voidaan käsitellä yksittäisiä bittejä. Nyt Huffman-koodaus tehdään täysin käyttämättä merkkijonoja. Bitarray-luokka on aika valmis nyt ja sen testikattavuus kävi jo 100-prosentissa, mutta ihan viikon lopussa jouduin laajentamaan luokkaa hieman ja testikattavuus laski. Tällä hetkellä luokan BitArray testikattavuus on siis noin 70%. Testien avulla onnistuin myös löytämään bugin tästä luokasta. Tarkistin, onko tietty bitti asetettu tekemällä ensin bittisiirron niin, että tietty bitti siirretään laitaan, jonka jälkeen sille tehdään and (&)-operaatio maskin kanssa, jonka jälkeen tarkistin onko tuloksena suurempi kuin 0, milloin oletin bitin olevan asetettu. Tämähän ei tietenkään toiminutkaan, kun javan longit ovat unsigned-tyyppisiä. Muutin vertailun tarkistamaan onko tuloksena saatu luku eri kuin 0, ja nyt kaikki käsittääkseni toimii. Tämän lisäksi loin ByteBuffer luokan, jolle on myös olemassa kattavat yksikkötestit. Luokkaa ei vielä käytetä mihinkään, mutta tarkoitusena on käyttää sitä tavujen rakentamiseen tiivistetyn huffman-koodin tallentamista varten.  
 

@@ -15,5 +15,6 @@
 | 08.08.2020 | 0.5   | Docstrings for HuffmanNode |
 | 10.08.2020 | 0.5   | Add tests for HuffmanNode |
 | 21.08.2020 | 3     | Peer reviewing of an another course project |
+| 25.08.2020 | 2     | Started to implement storing of the huffman trie |
 |            |       | |
-| **Total**  |**29** | |
+| **Total**  |**31** | |
