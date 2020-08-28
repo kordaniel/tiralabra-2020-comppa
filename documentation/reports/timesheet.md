@@ -16,5 +16,8 @@
 | 10.08.2020 | 0.5   | Add tests for HuffmanNode |
 | 21.08.2020 | 3     | Peer reviewing of an another course project |
 | 25.08.2020 | 2     | Started to implement storing of the huffman trie |
+| 28.08.2020 | 3     | Peer reviewing of an another course project |
+| 28.08.2020 | 2     | Fix bugs & refactor code |
+| 28.08.2020 | 6     | Implemented encoding the huffman Trie as bytes, with tests |
 |            |       | |
-| **Total**  |**31** | |
+| **Total**  |**42** | |

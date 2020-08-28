@@ -1,9 +1,21 @@
 # Viikkoraportit
 
-## [Viikko 5](#viikko-5)
-Tällä viikolla tein ainoastaan vertaisarvionnin. Aikaa käytin tähän noin 3h.
+## [Viikko 6](#viikko-6)
+Sain vihdoin itseäni hieman niskasta kiinni ja sain toteutettua tuon Huffman-puun tiivistämisen tavuiksi. Tämän lisäksi olen laajentanut useita luokkia, korjannut bugeja sekä tehnyt joitain testetjä. Nyt ohjelma on siinä pisteessä, että se ensin lukee tiedoston, tiivistää tämän ja tallentaa tiivistetyn version jonka jälkeen se lukee tiivistetyn tiedoston ja purkaa tämän sekä vielä tallentaa puretun tiedoston. Testasin ohjelman toimintaa useilla eri tiedostoilla, ja ohjelma toimi yllättävän hyvin. Joku pieni bugi vielä jäi, sillä purettu tiedosto on aina hieman alkuperäistä isompi. Ainakin niillä tiedostoilla mitä testasin, niin purettu tiedosto on identtinen alkuperäisen kanssa aina alkuperäisen tiedoston viimeiseen tavuun asti, mutta tosiaan purettuun tiedostoon tulee vielä ylimääräisiä tavuja jostain syystä.  
 
-Erinäisistä syistä nyt parin viikon aikana en ole onnistunut löytämään tarpeeksi aikaa ja motivaatiota edistää projektia. Haluan kuitenkin tehdä kurssin loppuun ja toivottavasti hyväksyttävästi, joten nyt viikolla 6 aion jatkaa projektia. Koska mikään ei ole oikein edennyt, niin viikon 3 raportti pätee yhä.
+#### Ensi viikon suunnitelma
+Viikonlopun aikana pitää saada algoritmi toimimaan oikein, eli niin että purettu tiedosto vastaa alkuperäistä sekä tämän myötä luoda kunnon testit huffman-luokalle. Tämän jälkeen ajatuksenani on luoda omat toteutukset käyttämilleni tietorakenteille, eli Taulukkolistalle sekä prioriteettijonolle ainakin. Tämän jälkeen voi tehdä suorituskykytestauksia, miten hyvin ohjelma tiivistää erilaisia tiedostoja ja kuinka nopeasti. Jos ehdin, niin ajatuksenani on tehdä rajapinnat, joita Bitarray- ja Bytebuffer-luokat käyttäisivät, sekä kokeilla erilaisia toteutuksia näille (ainakin linkitetty lista) ja vertailla miten suorituskyky eroaisi. Ehkä myös jonkunlainen käyttöliittymä, mistä olisi helppo nähdä kuinka pieneksi erityyppiset tiedostot pakkautuvat ja paljonko aikaa siihen menisi, tätä en kuitenkaan priorisoi.  
+
+Kaiken tämän lisäksi, niin pitää nyt ensi viikolla kun ohjelma muuten alkaa olla toimiva, niin kirjoittaa kaikki vaaditut dokumentit!  
+
+Vähintään siis aion totetuttaa edellä mainitut tietorakenteet sekä suorituskykyvertailut. Toivoisin ohjaajilta kommenttia, että riittäisikö tämä kurssin läpäisemiseen? Mitä vaaditttaisiin, jotta voisin toivoa hieman korkeampaa arvosanaa? Olettaisin, että varmaan myös jonkun toisen tiivistämisalgoritmin toteuttamista ja sitten vertailua näiden kahden välillä?  
+
+Tällä viikolla käytin noin 13h projektiin sekä vertaisarviointiin.  
+
+## [Viikko 5](#viikko-5)
+Tällä viikolla tein ainoastaan vertaisarvionnin. Aikaa käytin tähän noin 3h.  
+
+Erinäisistä syistä nyt parin viikon aikana en ole onnistunut löytämään tarpeeksi aikaa ja motivaatiota edistää projektia. Haluan kuitenkin tehdä kurssin loppuun ja toivottavasti hyväksyttävästi, joten nyt viikolla 6 aion jatkaa projektia. Koska mikään ei ole oikein edennyt, niin viikon 3 raportti pätee yhä.  
 
 Sain vertaisarvionnissa ihan hyvän linkin siitä, miten voisin tallentaa tuon huffmanin puun. Yritän implementoida sen ensin itsenäisesti, ja jos sitten koen asialle vielä tarvetta, niin voisin yrittää varata zoom-palaverin (kuten ohjaajan palautteessa viikolla 3 luki).  
 
