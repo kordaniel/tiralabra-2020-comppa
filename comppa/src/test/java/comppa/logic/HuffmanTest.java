@@ -1,14 +1,11 @@
-package logic;
+package comppa.logic;
 
 import comppa.domain.Constants;
 import comppa.domain.HuffmanNode;
-import comppa.logic.Huffman;
-import jdk.jshell.EvalException;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import static org.junit.Assert.assertTrue;
@@ -17,12 +14,12 @@ public class HuffmanTest {
 
     private Random random;
     private Huffman huffman;
-    private byte[] allBytes;  // Array containing all possible byte values.
+    private byte[] allBytes;      // Array containing all possible byte values.
     private byte[] fileBytesMock; // Array containing various bytes. This can be interpreted as
                                   // representing the bytes read from a file.
 
     public HuffmanTest() {
-        int seed = 13371;
+        int seed = 1337;
         random = new Random(seed);
 
         allBytes = new byte[Constants.BYTE_SIZE];
@@ -34,7 +31,6 @@ public class HuffmanTest {
         fileBytesMock = new byte[fileSize];
         for (int i = 0; i < fileSize; i++) {
                 fileBytesMock[i] = allBytes[random.nextInt(Constants.BYTE_SIZE)];
-
         }
     }
 
@@ -45,7 +41,9 @@ public class HuffmanTest {
 
     @Test
     public void testTrie() {
-        huffman.compress(allBytes);
+        byte[] huffEncoded = huffman.compress(allBytes);
+        byte[] huffDecoded = huffman.decompress(huffEncoded); // To build the trie from the compressed bytes
+
         HuffmanNode originalRootNode = huffman.getRootNode();
         HuffmanNode calculatRootNode = huffman.getRootNode2();
         assertTrue(travelTrie(originalRootNode, calculatRootNode));
@@ -53,7 +51,9 @@ public class HuffmanTest {
 
     @Test
     public void testTrie2() {
-        huffman.compress(fileBytesMock);
+        byte[] huffEncoded = huffman.compress(fileBytesMock);
+        byte[] huffDecoded = huffman.decompress(huffEncoded); // To build the trie from the compressed bytes
+
         HuffmanNode originalRootNode = huffman.getRootNode();
         HuffmanNode calculatRootNode = huffman.getRootNode2();
         assertTrue(travelTrie(originalRootNode, calculatRootNode));

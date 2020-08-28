@@ -32,54 +32,41 @@ public class Main {
             System.out.println("Using file \"" + filename + "\"");
         }
 
-        String filenameOut = filename + "_encoded_and_decoded";
+        String filenameOutCompressed = filename + "_encoded";
+        String filenameOutDecompressed = filename + "_encoded_and_decoded";
 
         byte[] fileBytes = Filehandler.readFileAsBytes(filename);
+        byte[] huffEncoded = huff.compress(fileBytes);
 
+        Filehandler.writeFileFromBytes(filenameOutCompressed, huffEncoded);
 
-        int byteLen = 256;
-        fileBytes = new byte[byteLen];
-        for (int i = 0; i < byteLen; i++) {
-            fileBytes[i] = (byte) (i-128);
-        }
+        byte[] readEncodedBytes = Filehandler.readFileAsBytes(filenameOutCompressed);
+        byte[] decompressedBytes = huff.decompress(readEncodedBytes);
 
+        Filehandler.writeFileFromBytes(filenameOutDecompressed, decompressedBytes);
 
-        Bitarray huffEncoded = huff.compress(fileBytes);
-
-        for (int i = 0; i < 10; i++) {
-            System.out.println();
-        }
-        System.out.println(huff.getRootNode().toStringAsTrieWithChildren());
-        System.out.println(huff.getRootNode2().toStringAsTrieWithChildren());
-        System.exit(0);
-        byte[] decodedBytes = huff.decompress(huffEncoded);
 
         System.out.println();
         System.out.println("[INFO] Read1 " + fileBytes.length + " bytes.");
         System.out.println("RESULT");
         System.out.println("------");
         System.out.println("ORIGINAL:        " + Arrays.toString(fileBytes));
-        System.out.println("ENCODED/DECODED: " + Arrays.toString(decodedBytes));
-        System.out.println("ENCODED:         " + huffEncoded); // Bits are printed in reverse
+        System.out.println("ENCODED/DECODED: " + Arrays.toString(decompressedBytes));
+        System.out.println("ENCODED:         " + Arrays.toString(huffEncoded));
         System.out.println();
         System.out.println("------");
-        System.out.println("ARRAYS EQUALS: " + Arrays.equals(fileBytes, decodedBytes));
+        System.out.println("ARRAYS EQUALS: " + Arrays.equals(fileBytes, decompressedBytes));
         System.out.println("ORIGINAL SIZE  : " + fileBytes.length + " bytes");
-        System.out.println("COMPDECOMP SIZE: " + decodedBytes.length + " bytes");
-        System.out.println("COMPRESSED SIZE: ~" + ((huffEncoded.getMostSignificantBit() + 1) / 8.0) + " bytes");
+        System.out.println("COMPDECOMP SIZE: " + decompressedBytes.length + " bytes");
+        System.out.println("COMPRESSED SIZE: ~" + huffEncoded.length + " bytes");
 
-        double compressedSize = Math.ceil((huffEncoded.getMostSignificantBit() + 1) / 8); // In bytes
-        double compressionRatio = 100 * (1 - (compressedSize / fileBytes.length));
-        System.out.printf("COMPRESSION RATIO: ~%5.2f%%%n", compressionRatio);
+        //double compressedSize = Math.ceil((huffEncoded.getMostSignificantBit() + 1) / 8); // In bytes
+        //double compressionRatio = 100 * (1 - (compressedSize / fileBytes.length));
+        //System.out.printf("COMPRESSION RATIO: ~%5.2f%%%n", compressionRatio);
 
-        //for (int i = 0; i < fileBytes.length; i++) {
-        //    System.out.print((char) fileBytes[i]);
-        //}
-
-        Filehandler.writeFileFromBytes(filenameOut, decodedBytes);
         System.out.println("");
         System.out.println("file in:  " + filename);
-        System.out.println("file out: " + filenameOut);
+        System.out.println("file out: " + filenameOutDecompressed);
         System.out.println("THESE FILES SHOULD BE IDENTICAL");
     }
 

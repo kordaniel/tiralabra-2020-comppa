@@ -36,6 +36,21 @@ public class Bitarray implements Cloneable {
         this.bits   = new long[this.length];
     }
 
+    public Bitarray(byte[] bytes) {
+        if (bytes.length < 1) {
+            throw new IllegalArgumentException("Cannot instantiate Bitarray for an byte array with size less than 1");
+        }
+
+        this.length = computeNeededLength(bytes.length * Constants.BYTE_WIDTH);
+        this.size   = this.length * DATA_WIDTH;
+        this.maxBit = -1;
+        this.bits   = new long[this.length];
+
+        for (int i = 0; i < bytes.length; i++) {
+            this.appendByteBits(bytes[i]);
+        }
+    }
+
     /**
      * This methods sets the bit at the specified bitIndex to 1.
      * @param bitIndex The index of the bit to be set to 1 (or simply to "true").
@@ -125,6 +140,27 @@ public class Bitarray implements Cloneable {
         }
 
         return (this.bits[calcIndexForArray(bitIndex)] & (1L << calcIndexForLong(bitIndex))) != 0;
+    }
+
+    public byte[] getAsByteArray() {
+        byte[] bytes = new byte[1 + (this.getMostSignificantBit() / Constants.BYTE_WIDTH)];
+        ByteBuffer byteBuffer = new ByteBuffer();
+        int index = 0;
+
+        for (int i = 0; i <= this.getMostSignificantBit(); i++) {
+            if (byteBuffer.append(this.getBit(i))) {
+                bytes[index] = byteBuffer.getCurrentByte();
+                index++;
+            }
+        }
+
+        if (index != bytes.length - 1) {
+            System.out.println("index: " + index);
+            System.out.println("bytes: " + bytes.length);
+            throw new RuntimeException("ERRRRRRRRRRROR while creating byte array");
+        }
+
+        return bytes;
     }
 
     /**
