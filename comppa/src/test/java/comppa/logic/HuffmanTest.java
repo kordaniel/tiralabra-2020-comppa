@@ -22,7 +22,7 @@ public class HuffmanTest {
                                   // representing the bytes read from a file.
 
     public HuffmanTest() {
-        int seed = 1337;
+        int seed = 13371;
         random = new Random(seed);
 
         allBytes = new byte[Constants.BYTE_SIZE];
