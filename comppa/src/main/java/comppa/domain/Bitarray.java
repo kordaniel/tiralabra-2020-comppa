@@ -103,7 +103,7 @@ public class Bitarray implements Cloneable {
      */
     public void appendByteBits(byte b) {
         for (int i = 0; i < Constants.BYTE_WIDTH; i++) {
-            if ((b & (1 << i)) != 0) {
+            if ((b & (Constants.BYTE_MASK << i)) != 0) {
                 appendBit(true);
             } else {
                 appendBit(false);

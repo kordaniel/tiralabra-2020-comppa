@@ -105,9 +105,40 @@ public class HuffmanNode implements Comparable<HuffmanNode> {
      */
     @Override
     public String toString() {
-        return "Byte       : " + new String(new byte[] {this.nodeByte})
+        return "Byte       : " + this.nodeByte
            + "\nFrequency  : " + this.frequency
            + "\nLeft Child : " + (this.left  != null ? "Yes" : "No")
            + "\nRight Child: " + (this.right != null ? "Yes" : "No");
     }
+
+    /**
+     * Prints this node and all it's children in the Trie formatted in a nice way.
+     * Useful for debugging the application.
+     * @return String containing the Trie with this Node as the root.
+     */
+    public String toStringAsTrieWithChildren() {
+        StringBuilder sb = new StringBuilder();
+        this.buildTrieString(sb, "", "");
+        return sb.toString();
+    }
+
+    /**
+     * Helper method for building the String representing the structure of the Trie.
+     * @param sb StringBuilder object containing the String that represents the structure of the Trie
+     * @param prefix The prefix for the string of this node.
+     * @param childrenPrefix The prefix for the children of this node.
+     */
+    private void buildTrieString(StringBuilder sb, String prefix, String childrenPrefix) {
+        sb.append(prefix);
+        sb.append(this.nodeByte);
+        sb.append("\n");
+
+        if (this.isLeaf()) {
+            return;
+        }
+
+        this.left.buildTrieString(sb,  childrenPrefix + "├── ", childrenPrefix + "|   ");
+        this.right.buildTrieString(sb, childrenPrefix + "└── ", childrenPrefix + "    ");
+    }
+
 }

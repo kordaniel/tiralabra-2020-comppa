@@ -39,7 +39,7 @@ public class ByteBufferTest {
 
     @Test
     public void appendingAlteringBitsReturnCorrectByte() {
-        // Should return the byte 01010101
+        // Should return the byte 10101010
         assertFalse(byteBuffer.append(false));
         assertFalse(byteBuffer.append(true));
         assertFalse(byteBuffer.append(false));
@@ -48,7 +48,7 @@ public class ByteBufferTest {
         assertFalse(byteBuffer.append(true));
         assertFalse(byteBuffer.append(false));
         assertTrue(byteBuffer.append(true));
-        assertEquals(85, byteBuffer.getCurrentByte());
+        assertEquals((byte) 170, byteBuffer.getCurrentByte());
     }
 
     @Test
@@ -57,7 +57,7 @@ public class ByteBufferTest {
             assertFalse(byteBuffer.append(false));
         }
         assertTrue(byteBuffer.append(false));
-        assertEquals(0, byteBuffer.getCurrentByte());
+        assertEquals((byte) 0, byteBuffer.getCurrentByte());
     }
 
     @Test
@@ -66,36 +66,35 @@ public class ByteBufferTest {
             assertFalse(byteBuffer.append(true));
         }
         assertTrue(byteBuffer.append(true));
-        assertEquals(-1, byteBuffer.getCurrentByte());
+        assertEquals((byte) -1, byteBuffer.getCurrentByte());
     }
 
     @Test
     public void appendingBitsToRepresentValueOneReturnsCorrectByte() {
-        for (int i = 0; i < 7; i++) {
-            assertFalse(byteBuffer.append(false));
-        }
-        assertTrue(byteBuffer.append((true)));
-        assertEquals(1, byteBuffer.getCurrentByte());
-    }
-
-    @Test
-    public void appendingBitsToRepresentByteMinValReturnsCorrectByte() {
         assertFalse(byteBuffer.append(true));
         for (int i = 0; i < 6; i++) {
             assertFalse(byteBuffer.append(false));
         }
-        assertTrue(byteBuffer.append(false));
-        assertEquals(-128, byteBuffer.getCurrentByte());
+        assertTrue(byteBuffer.append((false)));
+        assertEquals((byte) 1, byteBuffer.getCurrentByte());
+    }
+
+    @Test
+    public void appendingBitsToRepresentByteMinValReturnsCorrectByte() {
+        for (int i = 0; i < 7; i++) {
+            assertFalse(byteBuffer.append(false));
+        }
+        assertTrue(byteBuffer.append(true));
+        assertEquals((byte) -128, byteBuffer.getCurrentByte());
     }
 
     @Test
     public void appendingBitsToRepresentByteMaxValReturnsCorrectByte() {
-        assertFalse(byteBuffer.append(false));
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 7; i++) {
             assertFalse(byteBuffer.append(true));
         }
-        assertTrue(byteBuffer.append(true));
-        assertEquals(127, byteBuffer.getCurrentByte());
+        assertTrue(byteBuffer.append(false));
+        assertEquals((byte) 127, byteBuffer.getCurrentByte());
     }
 
     @Test
@@ -114,13 +113,14 @@ public class ByteBufferTest {
 
     @Test
     public void gettingCurrentByteResetsBuffer() {
-        for (int i = 0; i < 6; i++) {
+        assertFalse(byteBuffer.append(false));
+        assertFalse(byteBuffer.append(true));
+        for (int i = 0; i < 5; i++) {
             assertFalse(byteBuffer.append(false));
         }
-
-        assertFalse(byteBuffer.append(true));
         assertTrue(byteBuffer.append(false));
-        assertEquals(2, byteBuffer.getCurrentByte());
+
+        assertEquals((byte) 2, byteBuffer.getCurrentByte());
 
         // Should not throw exception after getting current byte
         assertFalse(byteBuffer.append(true));
