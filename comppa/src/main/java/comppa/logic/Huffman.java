@@ -16,36 +16,41 @@ public class Huffman {
 
     // 24 non set bits and 8 set
     private static final int byteToUnsignedMask = 0xFF;
-    // Signed 16-bit two's complement integer
-    private static final short byteSize = 1 << 8;
 
     private HuffmanNode rootNode;
+    private HuffmanNode rootNode2;
 
     public Huffman() {
         this.rootNode = null;
+        this.rootNode2 = null;
     }
 
     public Bitarray compress(byte[] input) {
         int[] frequencies = calculateBytesFrequencies(input);
         this.rootNode = buildTrie(frequencies);
 
-        System.out.println("-------------");
+        //System.out.println("-------------");
+
         Bitarray huffEncodedTrie = new Bitarray();
         huffmanEncodeTrie(rootNode, huffEncodedTrie);
 
-        HuffmanNode rootNode2 = huffmanDecodeTrie(huffEncodedTrie, 0);
+        this.rootNode2 = huffmanDecodeTrie(huffEncodedTrie, 0);
 
 
-        printTrie(this.rootNode);
-        System.out.println();
-        System.out.println("===========");
-        System.out.println();
-        printTrie(rootNode2);
-        for (int i = 0; i < 5; i++) {
-            System.out.println();
-        }
+        //printTrie(this.rootNode);
+        //System.out.println();
+        //System.out.println("===========");
+        //System.out.println();
+        //printTrie(this.rootNode2);
+        //for (int i = 0; i < 5; i++) {
+        //    System.out.println();
+        //}
         System.out.println("-------------");
-        Bitarray[] huffmanCodes = new Bitarray[byteSize];
+
+
+        return null;
+        /*
+        Bitarray[] huffmanCodes = new Bitarray[Constants.BYTE_SIZE];
         Bitarray huffmanCode = new Bitarray();
 
         int depth = -1;
@@ -53,6 +58,7 @@ public class Huffman {
         Bitarray huffEncodedBits = huffmanEncode(input, huffmanCodes);
 
         return huffEncodedBits;
+         */
     }
 
     private void printTrie(HuffmanNode node) {
@@ -63,6 +69,7 @@ public class Huffman {
             printTrie(node.getRight());
         }
     }
+
     public byte[] decompress(Bitarray huffEncoded) {
         ArrayList<Byte> bytes = new ArrayList<>();
 
@@ -77,6 +84,18 @@ public class Huffman {
         }
 
         return decodedBytes;
+    }
+
+    /**
+     * Getter that returns the huffmancodeTrie
+     * @return root node for the Huffmantrie
+     */
+    public HuffmanNode getRootNode() {
+        return this.rootNode;
+    }
+
+    public HuffmanNode getRootNode2() {
+        return this.rootNode2;
     }
 
     private int huffmanDecode(HuffmanNode node,  int indx, Bitarray huffEncoded, List<Byte> decodedBytes) {
@@ -112,17 +131,17 @@ public class Huffman {
     }
 
     private void huffmanEncodeTrie(HuffmanNode node, Bitarray encodedTrie) {
-        if (!node.isLeaf()) {
+        if (node.isLeaf()) {
+            encodedTrie.appendBit(true);
+            encodedTrie.appendByteBits(node.getNodeByte());
+        } else {
             encodedTrie.appendBit(false);
             huffmanEncodeTrie(node.getLeft(), encodedTrie);
             huffmanEncodeTrie(node.getRight(), encodedTrie);
-        } else {
-            //leaf node
-            encodedTrie.appendBit(true);
-            encodedTrie.appendByteBits(node.getNodeByte());
         }
     }
 
+    private int maxIndex = 0;
     private HuffmanNode huffmanDecodeTrie(Bitarray encodedTrie, int index) {
         if (encodedTrie.getBit(index)) {
             // leaf node
@@ -131,16 +150,15 @@ public class Huffman {
             for (int i = 1; i <= Constants.BYTE_WIDTH; i++) {
                 byteBuffer.append(encodedTrie.getBit(index + i));
             }
-
+            maxIndex = index + Constants.BYTE_WIDTH;
             byte currByte = byteBuffer.getCurrentByte();
-            System.out.println("DECODING TRIE, byte: " + currByte);
-
             return new HuffmanNode(currByte);
         }
 
         // internal node
-        HuffmanNode leftChild = huffmanDecodeTrie(encodedTrie, index + 1);
-        HuffmanNode rightChild = huffmanDecodeTrie(encodedTrie, index + 10);
+        HuffmanNode leftChild  = huffmanDecodeTrie(encodedTrie, index + 1);
+        HuffmanNode rightChild = rightChild = huffmanDecodeTrie(encodedTrie, maxIndex + 1);
+
         return new HuffmanNode(0, leftChild, rightChild);
     }
 
@@ -180,7 +198,7 @@ public class Huffman {
     private HuffmanNode buildTrie(int[] bytesFrequencies) {
         PriorityQueue<HuffmanNode> nodes = new PriorityQueue<>();
 
-        for (short i = 0; i < byteSize; i++) {
+        for (short i = 0; i < Constants.BYTE_SIZE; i++) {
             if (bytesFrequencies[i] == 0) {
                 continue;
             }
@@ -197,7 +215,7 @@ public class Huffman {
     }
 
     private int[] calculateBytesFrequencies(byte[] bytes) {
-        int[] frequencies = new int[byteSize];
+        int[] frequencies = new int[Constants.BYTE_SIZE];
 
         for (int i = 0; i < bytes.length; i++) {
             frequencies[byteToUnsignedInt(bytes[i])]++;
@@ -211,7 +229,7 @@ public class Huffman {
     }
 
     private byte unsignedIntToByte(int i) {
-        if (i >= 0 && i < byteSize) {
+        if (i >= 0 && i < Constants.BYTE_SIZE) {
             return (byte) i;
         }
 

@@ -36,8 +36,22 @@ public class Main {
 
         byte[] fileBytes = Filehandler.readFileAsBytes(filename);
 
+
+        int byteLen = 256;
+        fileBytes = new byte[byteLen];
+        for (int i = 0; i < byteLen; i++) {
+            fileBytes[i] = (byte) (i-128);
+        }
+
+
         Bitarray huffEncoded = huff.compress(fileBytes);
 
+        for (int i = 0; i < 10; i++) {
+            System.out.println();
+        }
+        System.out.println(huff.getRootNode().toStringAsTrieWithChildren());
+        System.out.println(huff.getRootNode2().toStringAsTrieWithChildren());
+        System.exit(0);
         byte[] decodedBytes = huff.decompress(huffEncoded);
 
         System.out.println();
