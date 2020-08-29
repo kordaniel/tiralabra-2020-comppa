@@ -143,19 +143,31 @@ public class Bitarray implements Cloneable {
     }
 
     public byte[] getAsByteArray() {
-        byte[] bytes = new byte[1 + (this.getMostSignificantBit() / Constants.BYTE_WIDTH)];
         ByteBuffer byteBuffer = new ByteBuffer();
-        int index = 0;
+        byte[] bytes   = new byte[1 + (this.getMostSignificantBit() / Constants.BYTE_WIDTH)];
+        int bitIndex   = 0;
+        int bytesIndex = 0;
+        boolean byteIsStored = false;
 
-        for (int i = 0; i <= this.getMostSignificantBit(); i++) {
-            if (byteBuffer.append(this.getBit(i))) {
-                bytes[index] = byteBuffer.getCurrentByte();
-                index++;
+        while (bitIndex <= this.getMostSignificantBit()) {
+            if (byteBuffer.append(this.getBit(bitIndex))) {
+                bytes[bytesIndex] = byteBuffer.getCurrentByte();
+                bytesIndex++;
+                byteIsStored = true;
+            } else {
+                byteIsStored = false;
             }
+            bitIndex++;
         }
 
-        if (index != bytes.length - 1) {
-            System.out.println("index: " + index);
+        if (!byteIsStored) {
+            bytes[bytesIndex] = byteBuffer.getCurrentByte();
+            bytesIndex++;
+        }
+
+        if (bytesIndex != bytes.length) {
+            // @TODO: DELETE THIS CHECK, only used while developing the software
+            System.out.println("index: " + bytesIndex);
             System.out.println("bytes: " + bytes.length);
             throw new RuntimeException("ERRRRRRRRRRROR while creating byte array");
         }
