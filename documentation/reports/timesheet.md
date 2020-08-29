@@ -19,5 +19,6 @@
 | 28.08.2020 | 3     | Peer reviewing of an another course project |
 | 28.08.2020 | 2     | Fix bugs & refactor code |
 | 28.08.2020 | 6     | Implemented encoding the huffman Trie as bytes, with tests |
+| 29.08.2020 | 1     | Fix bug concerning creation of byte[] array from Bitarray bits |
 |            |       | |
-| **Total**  |**42** | |
+| **Total**  |**43** | |

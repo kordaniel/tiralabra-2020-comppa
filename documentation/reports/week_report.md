@@ -1,5 +1,9 @@
 # Viikkoraportit
 
+## [Viikko 7](#viikko-7)
+### Lauantai
+Korjasin bugin koskien bittijonon tallentamisen tavutaulukkona. Huffmanin purussa on vieläkin bugi, missä purettuun tiedostoon saattaa tulla ylimääräinen tavu. Tämä taitaa johtua siitä, että pakkauksessa muodostetussa huffman-koodissa ei välttämättä ole täysi tavullinen bittejä viimeisenä merkkinä eikä ohjelmani tällä hetkellä ymmärrä tätä. Pitää yrittää miettiä miten tämän korjaisi. Luultavasti joudun kääntämään järjestyksen missä bittejä muutetaan tavuiksi.  
+
 ## [Viikko 6](#viikko-6)
 Sain vihdoin itseäni hieman niskasta kiinni ja sain toteutettua tuon Huffman-puun tiivistämisen tavuiksi. Tämän lisäksi olen laajentanut useita luokkia, korjannut bugeja sekä tehnyt joitain testetjä. Nyt ohjelma on siinä pisteessä, että se ensin lukee tiedoston, tiivistää tämän ja tallentaa tiivistetyn version jonka jälkeen se lukee tiivistetyn tiedoston ja purkaa tämän sekä vielä tallentaa puretun tiedoston. Testasin ohjelman toimintaa useilla eri tiedostoilla, ja ohjelma toimi yllättävän hyvin. Joku pieni bugi vielä jäi, sillä purettu tiedosto on aina hieman alkuperäistä isompi. Ainakin niillä tiedostoilla mitä testasin, niin purettu tiedosto on identtinen alkuperäisen kanssa aina alkuperäisen tiedoston viimeiseen tavuun asti, mutta tosiaan purettuun tiedostoon tulee vielä ylimääräisiä tavuja jostain syystä.  
 
