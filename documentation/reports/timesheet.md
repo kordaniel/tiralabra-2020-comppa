@@ -20,5 +20,6 @@
 | 28.08.2020 | 2     | Fix bugs & refactor code |
 | 28.08.2020 | 6     | Implemented encoding the huffman Trie as bytes, with tests |
 | 29.08.2020 | 1     | Fix bug concerning creation of byte[] array from Bitarray bits |
+| 28.08.2020 | 1     | Add test for Huffmantrie for bytes with a skewed distribution. The generation of a skewed distribution can probably be used for performance testing as well |
 |            |       | |
-| **Total**  |**43** | |
+| **Total**  |**44** | |
