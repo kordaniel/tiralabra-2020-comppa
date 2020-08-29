@@ -6,7 +6,9 @@ import comppa.domain.HuffmanNode;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Map;
 import java.util.Random;
+import java.util.TreeMap;
 
 import static org.junit.Assert.assertTrue;
 
@@ -51,14 +53,27 @@ public class HuffmanTest {
         }
 
         /* Print distribution of the bytes frequencies, for debugging
+        int maxFreq = 0;
         TreeMap<Byte, Integer> jakauma = new TreeMap<>();
         for (int i = 0; i < fileSize; i++) {
-            jakauma.put(fileBytesMockSkewed[i], jakauma.getOrDefault(fileBytesMockSkewed[i], 0) + 1);
+            int newFreq = jakauma.getOrDefault(fileBytesMockSkewed[i], 0) + 1;
+            jakauma.put(fileBytesMockSkewed[i], newFreq);
+            maxFreq = newFreq > maxFreq ? newFreq : maxFreq;
+        }
+        int divisor = 1;
+        while (maxFreq/divisor > 80) {
+            divisor += 1;
         }
         for (Map.Entry<Byte, Integer> entry : jakauma.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
+            //System.out.println(entry.getKey() + ": " + entry.getValue());
+            int barLength = entry.getValue() / divisor;
+            String bar = "#";
+            for (int i = 0; i < barLength; i++) {
+                bar += "#";
+            }
+            System.out.printf("%4d: %s%n", entry.getKey(), bar);
         }
-         */
+        */
     }
 
     @Before
