@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.util.Random;
 //import java.util.TreeMap;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
 
 public class HuffmanTest {
@@ -18,10 +19,13 @@ public class HuffmanTest {
     private Huffman huffman;
 
     private static Random random;
-    private static byte[] allBytes;            // Array containing all possible byte values.
-    private static byte[] fileBytesMock;       // Array containing various bytes, ~uniformly distributed. This can
-                                               // be interpreted as representing the bytes read from a file.
-    private static byte[] fileBytesMockSkewed;        // Array containing various bytes with a skewed distribution.
+    private static byte[] allBytes;                     // Array containing all possible byte values.
+    private static byte[] allBytesReverse;              // Array containing all possible byte values in reversed order.
+    private static byte[] fileBytesMock;                // Array containing various bytes, ~uniformly distributed. This
+                                                        // can be interpreted as representing the bytes read from a file.
+    private static byte[] fileBytesMockReverse;         // Previous array in reversed order.
+    private static byte[] fileBytesMockSkewed;          // Array containing various bytes with a skewed distribution.
+    private static byte[] fileBytesMockSkewedReverse;   // Previous array in reversed order.
 
     /**
      * Initialize arrays only one time.
@@ -32,17 +36,26 @@ public class HuffmanTest {
         random = new Random(seed);
 
         allBytes = new byte[Constants.BYTE_SIZE];
+        allBytesReverse = new byte[Constants.BYTE_SIZE];
+
         for (int i = 0; i < Constants.BYTE_SIZE; i++) {
-            allBytes[i] = (byte) (i - (Constants.BYTE_SIZE/2));
+            byte aByte = (byte) (i - (Constants.BYTE_SIZE/2));
+            allBytes[i] = aByte;
+            allBytesReverse[Constants.BYTE_SIZE - 1 - i] = aByte;
         }
 
-        int fileSize = 1024 * 1024 * 1; // 1 MB
-        fileBytesMock = new byte[fileSize];
-        for (int i = 0; i < fileSize; i++) {
-            fileBytesMock[i] = allBytes[random.nextInt(Constants.BYTE_SIZE)];
+        int fileBytesMockFileSize = 1024 * 1024 * 1; // 1 MB
+
+        fileBytesMock = new byte[fileBytesMockFileSize];
+        fileBytesMockReverse = new byte[fileBytesMockFileSize];
+
+        for (int i = 0; i < fileBytesMockFileSize; i++) {
+            byte aByte = allBytes[random.nextInt(Constants.BYTE_SIZE)];
+            fileBytesMock[i] = aByte;
+            fileBytesMockReverse[fileBytesMockFileSize - 1 - i] = aByte;
         }
 
-        populateSkewedFileBytes(fileSize * 3); // 3MB
+        populateSkewedFileBytes(1024 * 1024 * 3); // 3MB
     }
 
     /**
@@ -81,6 +94,42 @@ public class HuffmanTest {
         assertTrue(travelTrie(huffman.getRootNode(), huffman.getRootNode2()));
     }
 
+    @Test
+    public void testEncodingDecodingWithAllBytesOnce() {
+        byte[] huffDecoded = huffman.decompress(huffman.compress(allBytes));
+        assertArrayEquals(allBytes, huffDecoded);
+    }
+
+    @Test
+    public void testEncodingDecodingWithAllBytesOnceReversed() {
+        byte[] huffDecoded = huffman.decompress(huffman.compress(allBytesReverse));
+        assertArrayEquals(allBytesReverse, huffDecoded);
+    }
+
+    @Test
+    public void testEncodingDecodingWithRandomBytes() {
+        byte[] huffDecoded = huffman.decompress(huffman.compress(fileBytesMock));
+        assertArrayEquals(fileBytesMock, huffDecoded);
+    }
+
+    @Test
+    public void testEncodingDecodingWithRandomBytesReversed() {
+        byte[] huffDecoded = huffman.decompress(huffman.compress(fileBytesMockReverse));
+        assertArrayEquals(fileBytesMockReverse, huffDecoded);
+    }
+
+    @Test
+    public void testEncodingDecodingWithAllBytesRandomNormallyDistributed() {
+        byte[] huffDecoded = huffman.decompress(huffman.compress(fileBytesMockSkewed));
+        assertArrayEquals(fileBytesMockSkewed, huffDecoded);
+    }
+
+    @Test
+    public void testEncodingDecodingWithAllBytesRandomNormallyDistributedReversed() {
+        byte[] huffDecoded = huffman.decompress(huffman.compress(fileBytesMockSkewedReverse));
+        assertArrayEquals(fileBytesMockSkewedReverse, huffDecoded);
+    }
+
     /** Helper method to travel the Trie. Travels both the original Trie that is constructed while compressing
      * the bytes from the file and the Trie that is constructed from the compressed file.
      * @param original The (Initially root) node that has been created while compressing the file.
@@ -103,7 +152,7 @@ public class HuffmanTest {
     }
 
     /**
-     * Helper method to populate the fileBytesMockSkewed array. Populates the array with bytes
+     * Helper method to populate the fileBytesMockSkewed arrays. Populates the arrays with bytes
      * so that the different bytes have a normal distribution.
      * @param fileSize The size of the Mocked file in bytes.
      */
@@ -111,13 +160,19 @@ public class HuffmanTest {
         int stdDeviation = Constants.BYTE_SIZE/(2*3); // ~70% of byte vals should be in the range [-42,42]
         // ~95% in the range [-84,84]
         // and ~99% in the range [-126,126]
+
         fileBytesMockSkewed = new byte[fileSize];
+        fileBytesMockSkewedReverse = new byte[fileSize];
+
         for (int i = 0; i < fileSize; i++) {
             int byteValue;
+
             do {
                 byteValue = (int) Math.round(random.nextGaussian() * stdDeviation);
             } while (byteValue < -128 || byteValue > 127);
+
             fileBytesMockSkewed[i] = (byte) byteValue;
+            fileBytesMockSkewedReverse[fileSize - 1 - i] = (byte) byteValue;
         }
 
         /* Print distribution of the bytes frequencies, for debugging
