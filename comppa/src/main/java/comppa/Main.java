@@ -20,7 +20,7 @@ public class Main {
     public static void main(String[] args) {
         Huffman huff = new Huffman();
 
-        String filename = "testi100.txt";
+        String filename = "test_files/testi100.txt";
 
         if (args.length != 1) {
             System.out.println("Pass name of file to encode + decode as the only argument");
