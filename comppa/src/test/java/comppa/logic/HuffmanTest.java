@@ -133,7 +133,7 @@ public class HuffmanTest {
     /** Helper method to travel the Trie. Travels both the original Trie that is constructed while compressing
      * the bytes from the file and the Trie that is constructed from the compressed file.
      * @param original The (Initially root) node that has been created while compressing the file.
-     * @param constructedFromEncodedFile The (Initally root) node that has been constructed from the compressed file.
+     * @param constructedFromEncodedFile The (Initially root) node that has been constructed from the compressed file.
      * @return true, if both of the Tries have the same shape (prefix codes) and byte values, false otherwise.
      */
     private boolean travelTrie(HuffmanNode original, HuffmanNode constructedFromEncodedFile) {
