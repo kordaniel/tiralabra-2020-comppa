@@ -20,6 +20,9 @@
 | 28.08.2020 | 2     | Fix bugs & refactor code |
 | 28.08.2020 | 6     | Implemented encoding the huffman Trie as bytes, with tests |
 | 29.08.2020 | 1     | Fix bug concerning creation of byte[] array from Bitarray bits |
-| 28.08.2020 | 1     | Add test for Huffmantrie for bytes with a skewed distribution. The generation of a skewed distribution can probably be used for performance testing as well |
+| 29.08.2020 | 1     | Add test for Huffmantrie for bytes with a skewed distribution. The generation of a skewed distribution can probably be used for performance testing as well |
+| 29.08.2020 | 4     | Cleanup testfiles, project structure, implement compressing+decompressing to file, create tests |
+| 31.08.2020 | 2     | Continued with the same stuff as in the previous row |
+| 02.09.2020 | 2     | Implement dynamic array (ArrayList) with the required methods and tests for it |
 |            |       | |
-| **Total**  |**44** | |
+| **Total**  |**52** | |

@@ -1,0 +1,115 @@
+package comppa.datastructures;
+
+import comppa.domain.Constants;
+
+/**
+ * Dynamically growing Array for storing bytes.
+ * @author danielko
+ */
+public class ArrayLista {
+
+    // The default size of a newly created ArrayLista
+    public static final int DEFAULT_SIZE = 8;
+    // The default factor used for expanding this Array
+    public static final int DEFAULT_GROW_FACTOR = 2;
+
+    // The actual byte values stored in this instance of ArrayLista
+    private byte[] data;
+    // The current size of this instance of ArrayLista. This variable is used as the index
+    // when appending new objects to the end of this ArrayLista.
+    private int size;
+
+    /**
+     * Constructs a new ArrayLista with default initial size.
+     */
+    public ArrayLista() {
+        this(DEFAULT_SIZE);
+    }
+
+    /**
+     * Constructs a new ArrayLista with the size specified as the argument.
+     * @param initialSize The size for the new object.
+     */
+    public ArrayLista(int initialSize) {
+        this.data = new byte[initialSize];
+        this.size = 0;
+    }
+
+    /**
+     * Appends a new byte to the end of this object.
+     * @param b The byte to be appended to the end of this ArrayLista object.
+     */
+    public void add(byte b) {
+        if (this.size() == this.data.length) {
+            this.expand();
+        }
+
+        this.data[this.size++] = b;
+    }
+
+    /**
+     * Returns the byte at the specified index.
+     * @param i The index of the byte to be returned.
+     * @return The byte value at the specified index.
+     * @throws IndexOutOfBoundsException If passed an index that is negative or at
+     * least equal to the size of this object.
+     */
+    public byte get(int i) {
+        if (i < 0 || i >= this.size()) {
+            throw new IndexOutOfBoundsException(
+                    "Index " + i + " out of bounds for Arraylista with size of " + this.size()
+            );
+        }
+
+        return this.data[i];
+    }
+
+    /**
+     * The size of this object. That is, how many bytes are stored in this object.
+     * @return The size of this object.
+     */
+    public int size() {
+        return this.size;
+    }
+
+    /**
+     * Checks whether this object is empty or not.
+     * @return boolean, true if this object is empty and false otherwise.
+     */
+    public boolean isEmpty() {
+        return this.size() == 0;
+    }
+
+    /**
+     * Helper method that does required checks and calculations for expanding the array.
+     * @throws OutOfMemoryError If the Array is growing too large.
+     */
+    private void expand() {
+        if (this.size() == Constants.INT_MAX_VAL) {
+            throw new OutOfMemoryError("Cannot add more elements to this ArrayLista of length + " + this.size());
+        }
+
+        // Try to expand the size by multiplying with DEFAULT_GROW_FACTOR. Check for integer overflow
+        // and if the newSize overflows, then expand the array to the max possible size. For most environments
+        // it is required to adjust the max heap space for the Java VM to be able to use arrays this big.
+        int newSize = this.data.length * DEFAULT_GROW_FACTOR;
+        newSize = newSize < this.data.length ? Constants.INT_MAX_VAL : newSize;
+
+        expand(newSize);
+    }
+
+    /**
+     * Helper method that instantiates a new byte-array with the size passed as argument and copies all stored bytes
+     * into the new array.
+     * @param newSize The size of the expanded ArrayLista.
+     */
+    private void expand(int newSize) {
+        byte[] newArr = new byte[newSize];
+
+        for (int i = 0; i < this.size(); i++) {
+            newArr[i] = this.data[i];
+        }
+
+        this.data = newArr;
+    }
+}
