@@ -1,5 +1,7 @@
 package comppa.domain;
 
+import comppa.logic.Maath;
+
 import java.util.Arrays;
 
 /**
@@ -176,6 +178,20 @@ public class Bitarray implements Cloneable {
     }
 
     /**
+     * Returns a new instance of Bitarray where the order of the bits stored in this instance is reversed.
+     * @return Bitarray containing the reversed bits from this instance.
+     */
+    public Bitarray getReversed() {
+        Bitarray reversed = new Bitarray(Maath.max(this.getMostSignificantBit() + 1, 1));
+
+        for (int i = this.getMostSignificantBit(); i >= 0; i--) {
+            reversed.appendBit(this.getBit(i));
+        }
+
+        return reversed;
+    }
+
+    /**
      * The size of bits this instance can store.
      * @return Amount of bits this instance can store.
      */
@@ -341,13 +357,11 @@ public class Bitarray implements Cloneable {
             return true;
         }
 
-        // @TODO: Add check for index growing too large
         int newSize = this.getSize();
         while (newSize <= bitIndex) {
             newSize *= 2;
         }
         this.expand(newSize);
-
 
         return bitIndex < this.getSize() && bitIndex >= 0;
     }

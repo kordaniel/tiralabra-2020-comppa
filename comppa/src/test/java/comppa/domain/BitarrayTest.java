@@ -122,16 +122,12 @@ public class BitarrayTest {
 
     @Test
     public void ensureExceptionIsRaisedWithNegativeIndexForSetBit() {
-        // @TODO: If Bitarray is not refactored to be resizable we also
-        //        need to test this method for too big indexes.
         setIOoBExceptionExpectation(-1, Bitarray.DEF_SIZE);
         bitarray.setBit(-1);
     }
 
     @Test
     public void ensureExceptionIsRaisedWithNegativeIndexForUnsetBit() {
-        // @TODO: If Bitarray is not refactored to be resizable we also
-        //        need to test this method for too big indexes.
         setIOoBExceptionExpectation(-1, Bitarray.DEF_SIZE);
         bitarray.unsetBit(-1);
     }
@@ -249,6 +245,67 @@ public class BitarrayTest {
         assertTrue(clonedObj.getBit(1));
         assertTrue(clonedObj.getBit(2));
         assertFalse(clonedObj.getBit(5));
+    }
+
+    @Test
+    public void getReverseReturnsCorrectWhenEmpty() {
+        Bitarray reversed = bitarray.getReversed();
+        assertEquals(-1, reversed.getMostSignificantBit());
+    }
+
+    @Test
+    public void getReverseReturnsCorrectSingleBit() {
+        bitarray.setBit(0);
+        Bitarray reversedSet = bitarray.getReversed();
+        assertEquals(0, reversedSet.getMostSignificantBit());
+        assertTrue(reversedSet.getBit(0));
+
+        bitarray.unsetBit(0);
+        Bitarray reversedUnset = bitarray.getReversed();
+        assertEquals(0, reversedUnset.getMostSignificantBit());
+        assertFalse(reversedUnset.getBit(0));
+    }
+
+    @Test
+    public void getReverseReturnCorrectBitsWhenFirstBitIsUnset() {
+        Bitarray reversed;
+
+        // set bits: 01010101010
+        for (int i = 0; i < 11; i++) {
+            if (i % 2 == 0) {
+                bitarray.unsetBit(i);
+            } else {
+                bitarray.setBit(i);
+            }
+
+            reversed = bitarray.getReversed();
+            assertEquals(i, reversed.getMostSignificantBit());
+
+            for (int j = 0; j <= i; j++) {
+                assertEquals(bitarray.getBit(i - j), reversed.getBit(j));
+            }
+        }
+    }
+
+    @Test
+    public void getReverseReturnCorrectBitsWhenFirstBitIsSet() {
+        Bitarray reversed;
+
+        // set bits: 1010101010
+        for (int i = 0; i < 10; i++) {
+            if (i % 2 == 0) {
+                bitarray.setBit(i);
+            } else {
+                bitarray.unsetBit(i);
+            }
+
+            reversed = bitarray.getReversed();
+            assertEquals(i, reversed.getMostSignificantBit());
+
+            for (int j = 0; j <= i; j++) {
+                assertEquals(bitarray.getBit(i - j), reversed.getBit(j));
+            }
+        }
     }
 
     private void setIOoBExceptionExpectation(int index, int bitArrSize) {
