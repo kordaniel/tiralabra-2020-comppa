@@ -2,20 +2,18 @@ package comppa.datastructures;
 
 import comppa.domain.HuffmanNode;
 
-import java.util.ArrayList;
-
 /**
- * This class implements an priority queue. It is hardcoded to be a minimum Priority queue
- * for HuffManNodes.
+ * This class implements a priority queue. It is hardcoded to be a minimum Priority queue
+ * utilizing a minimum heap, implemented as a binary tree for HuffManNodes.
  */
 public class PriorityQueue {
 
     private final static int ROOT_NODE_INDEX = 1;
 
-    private ArrayList<HuffmanNode> data;
+    private ArrayListaHuffmanNode data;
 
     public PriorityQueue() {
-        this.data = new ArrayList<>();
+        this.data = new ArrayListaHuffmanNode();
         this.data.add(null); // start indexing from 1
     }
 
@@ -29,6 +27,7 @@ public class PriorityQueue {
         if (this.size() < 2) {
             return;
         }
+
         this.raiseNodeUpToCorrectPos(this.size());
     }
 
@@ -78,11 +77,6 @@ public class PriorityQueue {
         return this.data.size() - 1;
     }
 
-    @Override
-    public String toString() {
-        return this.data.toString();
-    }
-
     /**
      * Helper method that takes the index of one node, and moves it up the heap until
      * the heapProperty holds.
@@ -108,12 +102,12 @@ public class PriorityQueue {
     private void travelNodeDownToCorrectPos(int parentIndex) {
         int leftChildIndex = 2 * parentIndex;
         int rightChildIndex = 2 * parentIndex + 1;
-        int smallerChildIndex = -1;
 
         if (leftChildIndex >= this.data.size()) {
             return;
         }
 
+        int smallerChildIndex = -1;
         if (rightChildIndex < this.data.size()) {
             smallerChildIndex = this.getIndexForSmaller(leftChildIndex, rightChildIndex);
         } else {
