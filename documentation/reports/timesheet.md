@@ -24,5 +24,7 @@
 | 29.08.2020 | 4     | Cleanup testfiles, project structure, implement compressing+decompressing to file, create tests |
 | 31.08.2020 | 2     | Continued with the same stuff as in the previous row |
 | 02.09.2020 | 2     | Implement dynamic array (ArrayList) with the required methods and tests for it |
+| 03.09.2020 | 8     | A lot of misc coding with own datastructures and other helpers, trying to fix bug in HuffmanEncoding |
+| 04.09.2020 | 12    | Same again |
 |            |       | |
-| **Total**  |**52** | |
+| **Total**  |**72** | |

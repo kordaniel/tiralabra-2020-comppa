@@ -10,6 +10,7 @@ Comppa does not use any ready made data structures or algorithms, not from Java 
 * [Implementation](documentation/implementation.md)
 
 ### Weekly reports
+* [Week 7](documentation/reports/week_report.md#viikko-7)
 * [Week 6](documentation/reports/week_report.md#viikko-6)
 * [Week 5](documentation/reports/week_report.md#viikko-5)
 * [Week 4 (empty, no progress)](documentation/reports/week_report.md#viikko-4)

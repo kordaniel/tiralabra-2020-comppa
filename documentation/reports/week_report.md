@@ -2,7 +2,27 @@
 
 ## [Viikko 7](#viikko-7)
 ### Lauantai
-Korjasin bugin koskien bittijonon tallentamisen tavutaulukkona. Huffmanin purussa on vieläkin bugi, missä purettuun tiedostoon saattaa tulla ylimääräinen tavu. Tämä taitaa johtua siitä, että pakkauksessa muodostetussa huffman-koodissa ei välttämättä ole täysi tavullinen bittejä viimeisenä merkkinä eikä ohjelmani tällä hetkellä ymmärrä tätä. Pitää yrittää miettiä miten tämän korjaisi. Luultavasti joudun kääntämään järjestyksen missä bittejä muutetaan tavuiksi.  
+Korjasin bugin koskien bittijonon tallentamisen tavutaulukkona. Huffmanin purussa on vieläkin bugi, missä purettuun tiedostoon saattaa tulla ylimääräinen tavu. Tämä taitaa johtua siitä, että pakkauksessa muodostetussa huffman-koodissa ei välttämättä ole täysi tavullinen bittejä viimeisenä merkkinä eikä ohjelmani tällä hetkellä ymmärrä tätä. Pitää yrittää miettiä miten tämän korjaisi. Luultavasti joudun kääntämään järjestyksen missä bittejä muutetaan tavuiksi.
+
+### Loppuviikko
+Tällä viikolla käytin aika paljon aikaa ohjelman eteen. Suurin osa ajasta meni Huffmanin kanssa tapellessa. En vain saanut tuota bugia, missä pakattuun & purettuun tiedostoon saatta jäädä ylimääräinen tavu ratkaistua. Pitkin viikkoa kokeilin erilaisia ratkaisuja, mutta mikään niistä ei toiminut. Pakko tunnustaa suoraan, etten yhtään tiedä mistä tuo viimeinen tavu nyt tulee. Kun pakattua bittijonoa luodaan, niin alkuperäisen tiedoston jokainen tavu käydään läpi järjestyksessä, ja jokaisen tavun huffman-koodattu bittijono lisätään pakattuun huffman-bittijonoon. Tässähän on se ongelma, että muodostetun pakatun bittijonon pituus ei välttämättä ole tasan kahdeksalla jaollinen, jolloin kun sitä tallennetaan tavuina, niin viimeiseen tavuun saattaa jäädä/muodostua "ylimääräisiä" nollia aivan loppuun. Tällöinkin jos huffman-koodaus toimii oikein, niin käsittääkseni purettaessa tiedostoa niin näillä (nolla)biteillä ei pitäisi löytyä lehteä huffman-binääripuusta. Yritin jopa tallentaa huffman-bittijonon pituuden tallennetun tiedoston alkuun ja käytin tätä tietoa rajoittamaan kuinka monta bittiä käsitellään tiedostoa purettaessa.  
+
+Nyt valitettavasti aika loppuu kesken, ja projektissa kohdatut ongelmat huffmanin kanssa ovat viivästyttäneet projektia sen verran, etten enää ehdi kirjoittaa puuttuvia dokumentaatioita tai tehdä suorituskykyvertailuja. Pahoittelut tästä. Viikonloppukin menee väkisin muissa hommissa, niin en varmaan ehdi silloinkaan enää tutkia asiaa.  
+
+Tälllä viikolla opin jälleen aika paljon testaamisesta, sillä testien tekemiseen olen käyttänyt aika paljon aikaa. Niistä oli suuri apu omia tietorakenteita koodatessa.
+
+### Tietorakenteet
+ArrayLista sekä ArrayListaHuffmanNode ovat käytännössä kopioita toisistaan ja ArrayLista:lle olen tehnyt kattavat testit. ArrayListaHuffmanNode:en jouduin implementoimaan remove()-metodin, joten koska nämä luokat muuten ovat identtisiä, niin tein vain tälle metodille testit. Mietin ensin että olisin tehnyt ArrayListaa:sta geneerisen, mutta silloin en olisi voinut käyttää privitiivisiä byte-arvoja, joten päädyin tähän ratkaisuun tehokkuuden parantamiseksi.
+
+Nämä luokat tarjoavat O(1) ajassa toimivat alkioiden lisäämisen/päivittämisen ja hakemisen. Nämä kasvavat dynaamisesti tarpeen mukaan, mutta ohjelman luonteen takia en nähnyt tarpeelliseksi implementoida koon pienentämistä.
+
+PriorityQueue minimikeko HuffManNode:ille, joka tarjoaa pienimmän alkion hakemisen ajassa O(1), sekä alkioiden lisäämisen tai poistamisen ajassa O(log n), missä n on alkioiden lukumäärä keossa.
+
+ByteBuffer on puskuri, jonka avulla yksittäisistä biteistä voidaan luoda tavuja. Kaikki sen operaatiot tapahtuvat O(1) ajassa.
+
+Bitarray on dynaaminen tietorakenne yksittäisten bittien manipulointia varten. Se tarjoaa yksittäisten bittien manipuloinnin ja hakemisen O(1) ajassa. 
+
+Kaikki dynaamiset tietorakenteet tietysti joutuvat allokoimaan lisää tilaa tarpeen mukaan, jolloin alkioita joudutaan kopioimaan, mikä vie O(n) aikaa. Mutta nämä tietysti vakioituvat aikaan O(1) kaikilla paitsi minimikeolla. Jonka lisäksi tietysti nämä voidana luoda jo konstruktorin parametrin avulla tarpeeksi suuriksi jo alussa, jolloin päästään lähemmäs "aitoa" O(1) aikavaativuutta.
 
 ## [Viikko 6](#viikko-6)
 Sain vihdoin itseäni hieman niskasta kiinni ja sain toteutettua tuon Huffman-puun tiivistämisen tavuiksi. Tämän lisäksi olen laajentanut useita luokkia, korjannut bugeja sekä tehnyt joitain testetjä. Nyt ohjelma on siinä pisteessä, että se ensin lukee tiedoston, tiivistää tämän ja tallentaa tiivistetyn version jonka jälkeen se lukee tiivistetyn tiedoston ja purkaa tämän sekä vielä tallentaa puretun tiedoston. Testasin ohjelman toimintaa useilla eri tiedostoilla, ja ohjelma toimi yllättävän hyvin. Joku pieni bugi vielä jäi, sillä purettu tiedosto on aina hieman alkuperäistä isompi. Ainakin niillä tiedostoilla mitä testasin, niin purettu tiedosto on identtinen alkuperäisen kanssa aina alkuperäisen tiedoston viimeiseen tavuun asti, mutta tosiaan purettuun tiedostoon tulee vielä ylimääräisiä tavuja jostain syystä.  
