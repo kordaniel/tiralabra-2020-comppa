@@ -1,21 +1,23 @@
 package comppa.datastructures;
 
 import comppa.domain.Constants;
-import comppa.logic.Maath;
+import comppa.domain.HuffmanNode;
 
-/**
- * Dynamically growing Array for storing bytes.
- * @author danielko
- */
-public class ArrayLista {
+public class ArrayListaHuffmanNode {
+
+    // This class is basically a copypaste from the ArrayLista. Avoiding generics allows us to use actual
+    // primitive bytes instead of byte-like objects in the original ArrayLista.
+
+    // The tests for this class is limited to the remove()-method, since all other functionality is exactly
+    // the same (implementation) as in the ArrayLista-class, which is throughly tested.
 
     // The default size of a newly created ArrayLista
     public static final int DEFAULT_SIZE = 8;
     // The default factor used for expanding this Array
     public static final int DEFAULT_GROW_FACTOR = 2;
 
-    // The actual byte values stored in this instance of ArrayLista
-    private byte[] data;
+    // The actual HuffmanNodes stored in this instance of ArrayLista
+    private HuffmanNode[] data;
     // The current size of this instance of ArrayLista. This variable is used as the index
     // when appending new objects to the end of this ArrayLista.
     private int size;
@@ -23,7 +25,7 @@ public class ArrayLista {
     /**
      * Constructs a new ArrayLista with default initial size.
      */
-    public ArrayLista() {
+    public ArrayListaHuffmanNode() {
         this(DEFAULT_SIZE);
     }
 
@@ -31,32 +33,32 @@ public class ArrayLista {
      * Constructs a new ArrayLista with the size specified as the argument.
      * @param initialSize The size for the new object.
      */
-    public ArrayLista(int initialSize) {
-        this.data = new byte[initialSize];
+    public ArrayListaHuffmanNode(int initialSize) {
+        this.data = new HuffmanNode[initialSize];
         this.size = 0;
     }
 
     /**
-     * Appends a new byte to the end of this object.
-     * @param b The byte to be appended to the end of this ArrayLista object.
+     * Appends a new HuffmanNode to the end of this object.
+     * @param node The Huffman node to be appended to the end of this ArrayLista object.
      */
-    public void add(byte b) {
+    public void add(HuffmanNode node) {
         if (this.size() == this.data.length) {
             this.expand();
         }
 
-        this.data[this.size++] = b;
+        this.data[this.size++] = node;
     }
 
     /**
-     * Sets the byte at index i to the value of b.
-     * @param i The index of the byte to be set.
-     * @param b The value to be stored at the specified index.
+     * Sets the node at index i to be the node given as argument.
+     * @param i The index of the Node to be set.
+     * @param node The node object to be stored at the specified index.
      */
-    public void set(int i,  byte b) {
+    public void set(int i,  HuffmanNode node) {
         this.expand(i + 1); // Make sure the array length is long enough.
 
-        this.data[i] = b;
+        this.data[i] = node;
 
         if (i >= this.size()) {
             this.size = ++i;
@@ -64,13 +66,34 @@ public class ArrayLista {
     }
 
     /**
-     * Returns the byte at the specified index.
-     * @param i The index of the byte to be returned.
-     * @return The byte value at the specified index.
+     * Removes the current element at the specified index. Reduces the size of this Arraylista if the removed
+     * element is at the end.
+     * @param i Index of the element to be removed.
      * @throws IndexOutOfBoundsException If passed an index that is negative or at
      * least equal to the size of this object.
      */
-    public byte get(int i) {
+    public void remove(int i) {
+        if (i < 0 || i >= this.size()) {
+            throw new IndexOutOfBoundsException(
+                    "Index " + i + " out of bounds for Arraylista with size of " + this.size()
+            );
+        }
+
+        if (i == this.size() - 1) {
+            this.size--;
+        }
+
+        this.data[i] = null;
+    }
+
+    /**
+     * Returns the node at the specified index.
+     * @param i The index of the node to be returned.
+     * @return The node at the specified index. Can be null.
+     * @throws IndexOutOfBoundsException If passed an index that is negative or at
+     * least equal to the size of this object.
+     */
+    public HuffmanNode get(int i) {
         if (i < 0 || i >= this.size()) {
             throw new IndexOutOfBoundsException(
                     "Index " + i + " out of bounds for Arraylista with size of " + this.size()
@@ -81,21 +104,21 @@ public class ArrayLista {
     }
 
     /**
-     * Returns a new array object containing all bytes stored in this ArrayLista.
-     * @return byte[] array containing all bytes stored in this ArrayLista.
+     * Returns a new array object containing all the nodes stored in this ArrayLista.
+     * @return HuffmanNode[] array containing all the nodes stored in this ArrayLista.
      */
-    public byte[] toArray() {
-        byte[] bytes = new byte[this.size()];
+    public HuffmanNode[] toArray() {
+        HuffmanNode[] nodes = new HuffmanNode[this.size()];
 
         for (int i = 0; i < this.size(); i++) {
-            bytes[i] = this.data[i];
+            nodes[i] = this.data[i];
         }
 
-        return bytes;
+        return nodes;
     }
 
     /**
-     * The size of this object. That is, how many bytes are stored in this object.
+     * The size of this object. That is, how many nodes are currently stored in this object.
      * @return The size of this object.
      */
     public int size() {
@@ -108,55 +131,6 @@ public class ArrayLista {
      */
     public boolean isEmpty() {
         return this.size() == 0;
-    }
-
-    /**
-     * The textual representation of the contents in this ArrayLista. Every byte is printed as it's decimal value.
-     * @return
-     */
-    @Override
-    public String toString() {
-        int strSize = this.size() * 6 + 2; // Reserve room for brackets [] and ", " between bytes
-        char[] str = new char[strSize];
-
-        int strIndex = 0;
-        str[strIndex++] = '[';
-
-        for (int i = 0; i < this.size(); i++) {
-            if (i > 0) {
-                str[strIndex++] = ',';
-                str[strIndex++] = ' ';
-            }
-
-            if (this.data[i] == 0) {
-                str[strIndex++] = '0';
-                continue;
-            }
-
-            int byteVal = this.data[i];
-
-            if (byteVal < 0) {
-                str[strIndex++] = '-';
-            }
-
-            char[] byteValDigits = new char[3];
-            int digitIndex = 3;
-
-            while (byteVal != 0) {
-                digitIndex--;
-                byteValDigits[digitIndex] = (char) (48 + (Maath.abs(byteVal) % 10));
-                byteVal /= 10;
-            }
-
-            while (digitIndex < 3) {
-                str[strIndex++] = byteValDigits[digitIndex];
-                digitIndex++;
-            }
-        }
-
-        str[strIndex] = ']';
-
-        return new String(str);
     }
 
     /**
@@ -195,12 +169,12 @@ public class ArrayLista {
     }
 
     /**
-     * Helper method that instantiates a new byte-array with the size passed as argument and copies all stored bytes
+     * Helper method that instantiates a new HuffmanNode-array with the size passed as argument and copies all stored bytes
      * into the new array.
      * @param newSize The size of the expanded ArrayLista.
      */
     private void allocate(int newSize) {
-        byte[] newArr = new byte[newSize];
+        HuffmanNode[] newArr = new HuffmanNode[newSize];
 
         for (int i = 0; i < this.size(); i++) {
             newArr[i] = this.data[i];

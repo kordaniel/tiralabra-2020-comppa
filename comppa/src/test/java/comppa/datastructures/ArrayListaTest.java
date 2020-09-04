@@ -9,9 +9,7 @@ import org.junit.rules.ExpectedException;
 
 import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 public class ArrayListaTest {
 
@@ -123,5 +121,89 @@ public class ArrayListaTest {
         for (int i = 0; i < expectedBytesSize; i++) {
             assertEquals(expectedBytes[i], aLista.get(i));
         }
+    }
+
+    @Test
+    public void setWorksProperlyForSingleByte() {
+        aLista.set(0, (byte) 100);
+        assertEquals(1, aLista.size());
+        assertEquals((byte) 100, aLista.get(0));
+    }
+
+    @Test
+    public void setWorksProperlyForSeveralBytes() {
+        aLista.set(3,   (byte) -128);
+        aLista.set(100, (byte) 127);
+        aLista.set(511, (byte) 0);
+        aLista.set(64,  (byte) 33);
+        aLista.set(512, (byte) 1);
+        aLista.set(0,   (byte) -99);
+
+        assertEquals(513, aLista.size());
+
+        assertEquals((byte) -128, aLista.get(3));
+        assertEquals((byte) -99,  aLista.get(0));
+        assertEquals((byte)    0, aLista.get(511));
+        assertEquals((byte)    1, aLista.get(512));
+        assertEquals((byte)   33, aLista.get(64));
+        assertEquals((byte)  127, aLista.get(100));
+    }
+
+    @Test
+    public void setWorksWhenSettingByteToIndexLargerThanSize() {
+        int n = 100;
+        int[] usedIndexes = new int[n];
+        byte[] usedBytes = new byte[n];
+        int bound = 2 << 19; // 2^20 = 1 048 576
+        int maxIndex = 0;
+
+        for (int i = 0; i < n; i++) {
+            usedIndexes[i] = random.nextInt(bound);
+            usedBytes[i] = expectedBytes[i];
+            aLista.set(usedIndexes[i], usedBytes[i]);
+
+            if (usedIndexes[i] > maxIndex) {
+                assertEquals(usedIndexes[i] + 1, aLista.size());
+                maxIndex = usedIndexes[i];
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            assertEquals(usedBytes[i], aLista.get(usedIndexes[i]));
+        }
+    }
+
+    @Test
+    public void toArrayReturnsEmptyWhenEmpty() {
+        assertArrayEquals(new byte[0], aLista.toArray());
+    }
+
+    @Test
+    public void toArrayReturnsArrayWithOne() {
+        byte[] expected = {(byte) 127};
+        aLista.add((byte) 127);
+        assertArrayEquals(expected, aLista.toArray());
+    }
+
+    @Test
+    public void toArrayReturnsCorrectArrayWithSeveral() {
+        byte[] expected = {(byte) -128, (byte) 127, (byte) 0, (byte) 0, (byte) -1, (byte) 1};
+        for (byte b : expected) {
+            aLista.add(b);
+        }
+        assertArrayEquals(expected, aLista.toArray());
+    }
+
+    @Test
+    public void toArrayReturnsCorrectHugeArray() {
+        byte[] expected = new byte[999_999];
+        expected[9] = (byte) 99;
+        expected[999_998] = (byte) -99;
+        expected[123_321] = (byte) 123;
+
+        aLista.set(9, (byte) 99);
+        aLista.set(999_998, (byte) -99);
+        aLista.set(123_321, (byte) 123);
+        assertArrayEquals(expected, aLista.toArray());
     }
 }

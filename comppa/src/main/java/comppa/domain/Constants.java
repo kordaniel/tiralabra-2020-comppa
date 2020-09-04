@@ -15,6 +15,7 @@ public class Constants {
 
     // The max value this datatype can hold, one bit is for the sign so, signed max val
     public static final int INT_MAX_VAL = 0x7FFFFFFF;     // 2^31 - 1
+    public static final int INT_MIN_VAL = 0x80000000;
     public static final int INT_WIDTH   = 32;
     public static final int INT_MASK    = 1;
 
